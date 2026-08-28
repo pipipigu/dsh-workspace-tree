@@ -54,3 +54,7 @@ export declare const PinIcon: React.FC<{
     pinned?: boolean;
     style?: React.CSSProperties;
 }>;
+export declare const CloseIcon: React.FC<{
+    size?: number;
+    style?: React.CSSProperties;
+}>;
