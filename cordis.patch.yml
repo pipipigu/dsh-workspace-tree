@@ -1,0 +1,4 @@
+# dsh-workspace-tree bundle patch for DeepSeek Harness (DSH)
+- insert:
+    - id: workspace-tree
+      name: '@dsh-external/dsh-workspace-tree'

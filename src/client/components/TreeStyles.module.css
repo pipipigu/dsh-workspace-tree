@@ -1,0 +1,213 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 6px 8px;
+  font-size: 13px;
+  user-select: none;
+  border-bottom: 1px solid var(--dsw-border-default, rgba(255, 255, 255, 0.08));
+  background: var(--dsw-surface-0, transparent);
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 6px;
+  border-radius: 6px;
+  color: var(--dsw-text-secondary, #94a3b8);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.actionsGroup {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.iconBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
+  color: var(--dsw-text-muted, #64748b);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.iconBtn:hover {
+  background: var(--dsw-surface-2, rgba(255, 255, 255, 0.1));
+  color: var(--dsw-text-primary, #f8fafc);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  color: var(--dsw-text-secondary, #94a3b8);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.sectionTitle:hover {
+  background: var(--dsw-surface-1, rgba(255, 255, 255, 0.05));
+  color: var(--dsw-text-primary, #f8fafc);
+}
+
+.sectionTitle.dragOver {
+  background: rgba(96, 165, 250, 0.15);
+  outline: 1px dashed #60a5fa;
+}
+
+.folderList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.folderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 8px;
+  border-radius: 6px;
+  color: var(--dsw-text-primary, #e2e8f0);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.folderRow:hover {
+  background: var(--dsw-surface-1, rgba(255, 255, 255, 0.06));
+}
+
+.folderRow.dragOver {
+  background: rgba(96, 165, 250, 0.2);
+  outline: 1px dashed #60a5fa;
+}
+
+.folderLeft {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+}
+
+.folderColorDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.folderName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.badge {
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-size: 11px;
+  background: var(--dsw-surface-2, rgba(255, 255, 255, 0.08));
+  color: var(--dsw-text-muted, #94a3b8);
+  margin-left: 4px;
+}
+
+.sessionItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 8px 5px 24px;
+  border-radius: 6px;
+  color: var(--dsw-text-secondary, #cbd5e1);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sessionItem:hover {
+  background: var(--dsw-surface-2, rgba(255, 255, 255, 0.08));
+  color: var(--dsw-text-primary, #ffffff);
+}
+
+.sessionItem.active {
+  background: rgba(96, 165, 250, 0.18);
+  color: #93c5fd;
+  font-weight: 600;
+  border-left: 2px solid #60a5fa;
+}
+
+.sessionTitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.subprojectCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 8px;
+  border-radius: 6px;
+  background: var(--dsw-surface-1, rgba(255, 255, 255, 0.03));
+  border: 1px solid var(--dsw-border-default, rgba(255, 255, 255, 0.06));
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.subprojectCard:hover {
+  background: var(--dsw-surface-2, rgba(255, 255, 255, 0.08));
+  border-color: rgba(96, 165, 250, 0.4);
+}
+
+.subprojectLeft {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+}
+
+.subprojectTypeTag {
+  padding: 1px 4px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  background: rgba(74, 222, 128, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+.newFolderInput {
+  width: 100%;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #60a5fa;
+  background: var(--dsw-surface-2, #1e293b);
+  color: #f8fafc;
+  font-size: 12px;
+  outline: none;
+}
