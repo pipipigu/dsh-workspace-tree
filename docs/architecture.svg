@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 380" width="880" height="380">
+  <defs>
+    <linearGradient id="bgGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b0f19" />
+      <stop offset="100%" stop-color="#111827" />
+    </linearGradient>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#60a5fa" />
+    </marker>
+    <marker id="arrowGreen" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#4ade80" />
+    </marker>
+    <marker id="arrowAmber" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#fbbf24" />
+    </marker>
+  </defs>
+
+  <style>
+    .font-base { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    .box-title { font-size: 13px; font-weight: 600; }
+    .box-desc { font-size: 11px; fill: #94a3b8; }
+  </style>
+
+  <!-- Background -->
+  <rect width="880" height="380" rx="12" fill="url(#bgGrad3)" stroke="#1e293b" stroke-width="1" />
+
+  <!-- Section Title -->
+  <text x="30" y="36" class="font-base" font-size="16" font-weight="700" fill="#f8fafc">dsh-workspace-tree 系统架构与数据流 (Architecture &amp; Data Flow)</text>
+
+  <!-- Layer 1: Web GUI & Slot Layer (Blue) -->
+  <g transform="translate(30, 60)">
+    <rect width="250" height="290" rx="10" fill="#111c2e" stroke="#2563eb" stroke-width="1.2" />
+    <rect width="250" height="36" rx="10" fill="#1e3a5f" />
+    <text x="125" y="23" text-anchor="middle" class="font-base box-title" fill="#93c5fd">DSH Web GUI / Slot 渲染层</text>
+
+    <!-- Node 1.1 -->
+    <g transform="translate(15, 52)">
+      <rect width="220" height="64" rx="6" fill="#152438" stroke="#3b82f6" stroke-width="1" />
+      <text x="110" y="24" text-anchor="middle" class="font-base" font-size="12" font-weight="600" fill="#f8fafc">sidebar.workspaces 槽位</text>
+      <text x="110" y="44" text-anchor="middle" class="font-base box-desc">priority: -10 深度单槽遮蔽接管</text>
+    </g>
+
+    <!-- Node 1.2 -->
+    <g transform="translate(15, 130)">
+      <rect width="220" height="64" rx="6" fill="#152438" stroke="#3b82f6" stroke-width="1" />
+      <text x="110" y="24" text-anchor="middle" class="font-base" font-size="12" font-weight="600" fill="#f8fafc">EnhancedWorkspaceBrowser</text>
+      <text x="110" y="44" text-anchor="middle" class="font-base box-desc">任务胶囊 / 虚拟文件夹 / 拖拽交互</text>
+    </g>
+
+    <!-- Node 1.3 -->
+    <g transform="translate(15, 208)">
+      <rect width="220" height="64" rx="6" fill="#152438" stroke="#3b82f6" stroke-width="1" />
+      <text x="110" y="24" text-anchor="middle" class="font-base" font-size="12" font-weight="600" fill="#f8fafc">Pure SVG 图标与状态动效</text>
+      <text x="110" y="44" text-anchor="middle" class="font-base box-desc">蓝光进行中 / 绿光待读 / 纯矢量</text>
+    </g>
+  </g>
+
+  <!-- Flow 1 -> 2 Arrow -->
+  <path d="M 282 172 L 318 172" stroke="#60a5fa" stroke-width="2" marker-end="url(#arrowBlue)" fill="none" />
+  <text x="300" y="160" text-anchor="middle" class="font-base" font-size="10" fill="#60a5fa">订阅/操作</text>
+
+  <!-- Layer 2: Reactive State Machine (Green) -->
+  <g transform="translate(320, 60)">
+    <rect width="250" height="290" rx="10" fill="#0f241a" stroke="#059669" stroke-width="1.2" />
+    <rect width="250" height="36" rx="10" fill="#134e3a" />
+    <text x="125" y="23" text-anchor="middle" class="font-base box-title" fill="#86efac">Local-First 响应式状态中枢</text>
+
+    <!-- Node 2.1 -->
+    <g transform="translate(15, 52)">
+      <rect width="220" height="64" rx="6" fill="#143224" stroke="#10b981" stroke-width="1" />
+      <text x="110" y="24" text-anchor="middle" class="font-base" font-size="12" font-weight="600" fill="#f8fafc">多工作区缓存 Map 字典</text>
+      <text x="110" y="44" text-anchor="middle" class="font-base box-desc">cache: Map&lt;wsPath, Meta&gt;</text>
+    </g>
+
+    <!-- Node 2.2 -->
+    <g transform="translate(15, 130)">
+      <rect width="220" height="64" rx="6" fill="#143224" stroke="#10b981" stroke-width="1" />
+      <text x="110" y="24" text-anchor="middle" class="font-base" font-size="12" font-weight="600" fill="#f8fafc">0ms Version 快照引擎</text>
+      <text x="110" y="44" text-anchor="middle" class="font-base box-desc">getVersion() 驱动毫秒级重渲染</text>
+    </g>
+
+    <!-- Node 2.3 -->
+    <g transform="translate(15, 208)">
+      <rect width="220" height="64" rx="6" fill="#143224" stroke="#10b981" stroke-width="1" />
+      <text x="110" y="24" text-anchor="middle" class="font-base" font-size="12" font-weight="600" fill="#f8fafc">原子操作控制器</text>
+      <text x="110" y="44" text-anchor="middle" class="font-base box-desc">新建会话直属 / 归类 / 拖拽 / 置顶</text>
+    </g>
+  </g>
+
+  <!-- Flow 2 -> 3 Arrow -->
+  <path d="M 572 172 L 608 172" stroke="#4ade80" stroke-width="2" marker-end="url(#arrowGreen)" fill="none" />
+  <text x="590" y="160" text-anchor="middle" class="font-base" font-size="10" fill="#4ade80">异步持久化</text>
+
+  <!-- Layer 3: Host Storage & API (Amber) -->
+  <g transform="translate(610, 60)">
+    <rect width="240" height="290" rx="10" fill="#241a0d" stroke="#d97706" stroke-width="1.2" />
+    <rect width="240" height="36" rx="10" fill="#451a03" />
+    <text x="120" y="23" text-anchor="middle" class="font-base box-title" fill="#fde68a">Host 服务与本地磁盘存储</text>
+
+    <!-- Node 3.1 -->
+    <g transform="translate(12, 52)">
+      <rect width="216" height="64" rx="6" fill="#38230f" stroke="#f59e0b" stroke-width="1" />
+      <text x="108" y="24" text-anchor="middle" class="font-base" font-size="12" font-weight="600" fill="#f8fafc">/api/dsh-workspace-tree/*</text>
+      <text x="108" y="44" text-anchor="middle" class="font-base box-desc">HTTP RPC 路由 (meta / scan)</text>
+    </g>
+
+    <!-- Node 3.2 -->
+    <g transform="translate(12, 130)">
+      <rect width="216" height="64" rx="6" fill="#38230f" stroke="#f59e0b" stroke-width="1" />
+      <text x="108" y="24" text-anchor="middle" class="font-base" font-size="12" font-weight="600" fill="#f8fafc">.dsh/workspace-tree.json</text>
+      <text x="108" y="44" text-anchor="middle" class="font-base box-desc">工作区级原子 JSON 文件落盘</text>
+    </g>
+
+    <!-- Node 3.3 -->
+    <g transform="translate(12, 208)">
+      <rect width="216" height="64" rx="6" fill="#38230f" stroke="#f59e0b" stroke-width="1" />
+      <text x="108" y="24" text-anchor="middle" class="font-base" font-size="12" font-weight="600" fill="#f8fafc">Subproject 嗅探器</text>
+      <text x="108" y="44" text-anchor="middle" class="font-base box-desc">识别 Node / Rust / Java / Go 等子工程</text>
+    </g>
+  </g>
+</svg>

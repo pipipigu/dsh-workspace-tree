@@ -10,6 +10,20 @@
 
 ---
 
+## 📸 界面效果预览 (Visual Previews)
+
+### 1. 侧边栏全景与核心特性概览 (Sidebar Overview)
+
+![dsh-workspace-tree 侧边栏全景演示](docs/preview-main.svg)
+
+---
+
+### 2. 拖拽归类与落点交互反馈 (Drag & Drop Interaction)
+
+![dsh-workspace-tree 拖拽与释放区演示](docs/preview-drag-drop.svg)
+
+---
+
 ## 🌟 核心特性 (Key Features)
 
 - **📁 纯虚拟会话分类文件夹 (Virtual Session Folders)**
@@ -37,7 +51,7 @@
 
 - **🎨 原生侧边栏深度接管 (Native Single Slot Shadowing)**
   - 基于 DSH 核心 `sidebar.workspaces` 槽位以 `priority: -10` 无缝深度接管，完美适配 DSH 原生深色/浅色调色板（`--dsw-*`）；
-  - 全量采用 **Pure SVG** 矢量矢量图形体系，视觉纯净高雅，杜绝 Emoji 杂乱干扰。
+  - 全量采用 **Pure SVG** 矢量图形体系，视觉纯净高雅，杜绝 Emoji 杂乱干扰。
 
 - **⚡ 0ms 版本快照响应式引擎 (0ms Reactive TreeStore)**
   - 采用基于版本递增快照的 `useSyncExternalStore` 响应式状态机，任何移动、重命名、归类操作 **0ms 瞬间触发视图重渲染**。
@@ -75,37 +89,7 @@ dsh plugin --profile web add link:$(pwd)
 
 ## 🏗️ 架构与数据流 (Architecture)
 
-```mermaid
-flowchart TD
-    subgraph DSH[DeepSeek Harness Web GUI]
-      SLOT[sidebar.workspaces 槽位接管<br>priority: -10]
-      UI[EnhancedWorkspaceBrowser 组件]
-    end
-
-    subgraph Store[Local-First 响应式状态中枢]
-      TS[TreeStore 响应式字典<br>cache: Map&lt;wsPath, Meta&gt;]
-      VER[Version 快照订阅<br>0ms React 渲染驱动]
-    end
-
-    subgraph Host[DSH Host & Local Storage]
-      API[/api/dsh-workspace-tree/*<br>HTTP RPC 路由]
-      DISK[(.dsh/workspace-tree.json<br>原子 JSON 存储)]
-    end
-
-    SLOT --> UI
-    UI <-->|useSyncExternalStore| TS
-    TS --> VER
-    UI -->|增删改查 / 拖拽归类| TS
-    TS -->|异步落盘| API
-    API --> DISK
-
-    classDef web fill:#1a2332,stroke:#60a5fa,color:#93c5fd
-    classDef store fill:#1b2d20,stroke:#4ade80,color:#86efac
-    classDef host fill:#2d2416,stroke:#fbbf24,color:#fde68a
-    class SLOT,UI web
-    class TS,VER store
-    class API,DISK host
-```
+![dsh-workspace-tree 系统架构与数据流](docs/architecture.svg)
 
 ---
 
