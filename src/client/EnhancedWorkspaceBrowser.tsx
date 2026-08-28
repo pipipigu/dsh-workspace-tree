@@ -28,6 +28,8 @@ export interface EnhancedWorkspaceBrowserProps {
   open?: (sessionId: SessionId) => void
   renameWorkspace?: (workspaceId: WorkspaceId, title: string) => Promise<void>
   deleteWorkspace?: (workspaceId: WorkspaceId) => Promise<void>
+  createWorkspace?: (input: { path: string }) => Promise<WorkspaceView>
+  pickDirectory?: () => Promise<string | null>
   renameSession?: (sessionId: SessionId, title: string) => Promise<void>
   archiveSession?: (sessionId: SessionId) => Promise<void>
   forkSession?: (sessionId: SessionId) => void
@@ -123,6 +125,8 @@ export const EnhancedWorkspaceBrowser: React.FC<EnhancedWorkspaceBrowserProps> =
   const [expandedWorkspaces, setExpandedWorkspaces] = useState<Set<string>>(new Set())
   const [searchQuery, setSearchQuery] = useState('')
   const [showSearch, setShowSearch] = useState(false)
+  const [isAddingWorkspace, setIsAddingWorkspace] = useState(false)
+  const [newWorkspacePath, setNewWorkspacePath] = useState('')
   const [activeMenuWsId, setActiveMenuWsId] = useState<string | null>(null)
   const [editingWsId, setEditingWsId] = useState<string | null>(null)
   const [editWsTitle, setEditWsTitle] = useState('')
@@ -376,17 +380,82 @@ export const EnhancedWorkspaceBrowser: React.FC<EnhancedWorkspaceBrowserProps> =
     })
   }, [items, searchQuery, sessionsState.byId, archivedSet])
 
+  const handleOpenAddWorkspace = async () => {
+    try {
+      if (props.pickDirectory) {
+        const picked = await props.pickDirectory()
+        if (picked) {
+          const res = await props.createWorkspace?.({ path: picked })
+          if (res) {
+            const wsId = (res as any).workspaceId || (res as any).id
+            if (wsId) {
+              setExpandedWorkspaces((prev) => new Set([...prev, wsId]))
+              props.startSession?.(wsId)
+            }
+            globalTreeStore.loadWorkspace(picked)
+            return
+          }
+        }
+      }
+    } catch {
+      // ignore
+    }
+    // Fallback: show inline input for manual absolute path
+    setIsAddingWorkspace(true)
+    setShowSearch(false)
+  }
+
+  const handleConfirmAddWorkspace = async () => {
+    const p = newWorkspacePath.trim()
+    if (!p) {
+      setIsAddingWorkspace(false)
+      return
+    }
+    try {
+      const res = await props.createWorkspace?.({ path: p })
+      if (res) {
+        const wsId = (res as any).workspaceId || (res as any).id
+        if (wsId) {
+          setExpandedWorkspaces((prev) => new Set([...prev, wsId]))
+          props.startSession?.(wsId)
+        }
+        globalTreeStore.loadWorkspace(p)
+      }
+    } catch (err) {
+      console.error('[dsh-workspace-tree] Create workspace failed:', err)
+    } finally {
+      setIsAddingWorkspace(false)
+      setNewWorkspacePath('')
+    }
+  }
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflowY: 'auto', userSelect: 'none', fontFamily: 'inherit' }}>
       {/* 1. Header Bar: 工作区 */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 14px 6px', color: 'var(--dsw-alias-label-primary, #f8fafc)', fontSize: '13px', fontWeight: 600 }}>
         <span>工作区</span>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
           <button
             style={{
-              background: 'transparent',
+              background: isAddingWorkspace ? 'rgba(96, 165, 250, 0.2)' : 'transparent',
               border: 'none',
-              color: 'var(--dsw-alias-label-tertiary, #94a3b8)',
+              color: isAddingWorkspace ? '#60a5fa' : 'var(--dsw-alias-label-tertiary, #94a3b8)',
+              cursor: 'pointer',
+              padding: '3px',
+              borderRadius: '4px',
+              display: 'inline-flex',
+              alignItems: 'center',
+            }}
+            title="添加/新建工作区"
+            onClick={handleOpenAddWorkspace}
+          >
+            <PlusIcon size={14} />
+          </button>
+          <button
+            style={{
+              background: showSearch ? 'rgba(96, 165, 250, 0.2)' : 'transparent',
+              border: 'none',
+              color: showSearch ? '#60a5fa' : 'var(--dsw-alias-label-tertiary, #94a3b8)',
               cursor: 'pointer',
               padding: '3px',
               borderRadius: '4px',
@@ -394,12 +463,45 @@ export const EnhancedWorkspaceBrowser: React.FC<EnhancedWorkspaceBrowserProps> =
               alignItems: 'center',
             }}
             title="搜索工作区或会话"
-            onClick={() => setShowSearch(!showSearch)}
+            onClick={() => {
+              setShowSearch(!showSearch)
+              setIsAddingWorkspace(false)
+            }}
           >
             <SearchIcon size={14} />
           </button>
         </div>
       </div>
+
+      {/* 紧凑新建/添加工作区输入框 */}
+      {isAddingWorkspace && (
+        <div style={{ padding: '2px 10px 6px' }}>
+          <input
+            autoFocus
+            style={{
+              ...DSH_INPUT_STYLE,
+              width: '100%',
+              height: '28px',
+              padding: '0 8px',
+              borderRadius: '6px',
+            }}
+            placeholder="输入项目目录路径 (如 /home/user/project)..."
+            value={newWorkspacePath}
+            onChange={(e) => setNewWorkspacePath(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleConfirmAddWorkspace()
+              if (e.key === 'Escape') {
+                setIsAddingWorkspace(false)
+                setNewWorkspacePath('')
+              }
+            }}
+            onBlur={() => {
+              if (!newWorkspacePath.trim()) setIsAddingWorkspace(false)
+              else handleConfirmAddWorkspace()
+            }}
+          />
+        </div>
+      )}
 
       {/* 紧凑搜索输入框 */}
       {showSearch && (

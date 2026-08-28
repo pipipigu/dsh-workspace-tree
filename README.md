@@ -46,6 +46,10 @@
   - **Zero Misclicks**: Replaced awkward sidebar drag-and-drop with a crisp, reliable click-to-move dropdown menu.
   - **Instant Categorization**: Quick folder selection or inline new folder creation; dedicated eject button inside folders to return sessions to uncategorized.
 
+- **➕ Add Workspace & Directory Picker Support**
+  - Dedicated **`[+]` Add Workspace** button in the sidebar header bar.
+  - Smart dual-mode support: automatically invokes native OS directory pickers when available, while offering an inline absolute-path input field fallback.
+
 - **📌 Session Pinning, Inline Rename & Pagination**
   - Pin important sessions to the top of the workspace.
   - Double-click any session title to activate inline renaming.
