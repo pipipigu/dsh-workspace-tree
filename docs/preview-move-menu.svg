@@ -35,15 +35,15 @@
     <rect width="320" height="368" rx="8" fill="url(#sidebarGrad2)" stroke="#1e293b" stroke-width="1" />
 
     <!-- 1. Header -->
-    <text x="14" y="24" class="font-base title">工作区 / dsh相关</text>
+    <text x="14" y="24" class="font-base title">工作区 / project-workspace</text>
 
     <!-- 2. Target Folder 1 -->
     <g transform="translate(12, 42)">
       <rect width="296" height="30" rx="6" fill="rgba(255, 255, 255, 0.02)"/>
       <path d="M10 12 L14 16 L18 12" stroke="#94a3b8" stroke-width="1.2" fill="none"/>
       <path d="M22 10 L26 10 L28 12 L35 12 C36 12 37 13 37 14 L37 20 C37 21 36 22 35 22 L22 22 C21 22 20 21 20 20 L20 12 C20 11 21 10 22 10 Z" fill="#38bdf8"/>
-      <text x="42" y="20" class="font-base label-primary">数据库分析工具</text>
-      <text x="140" y="20" class="font-base label-tertiary">(2)</text>
+      <text x="42" y="20" class="font-base label-primary">核心后端模块</text>
+      <text x="120" y="20" class="font-base label-tertiary">(2)</text>
       <!-- Quick [+] Button -->
       <g transform="translate(266, 6)">
         <rect width="18" height="18" rx="3" fill="rgba(255,255,255,0.08)" />
@@ -55,7 +55,7 @@
     <g transform="translate(28, 78)">
       <rect width="280" height="26" rx="4" fill="transparent"/>
       <path d="M6 8 C6 6.5 7.5 5 9 5 L17 5 C18.5 5 20 6.5 20 8 L20 13 C20 14.5 18.5 16 17 16 L10 16 L6 19 Z" fill="none" stroke="#64748b" stroke-width="1.2"/>
-      <text x="26" y="17" class="font-base label-primary">HTFS 土壤墒情监测</text>
+      <text x="26" y="17" class="font-base label-primary">架构设计与接口规范</text>
       <!-- Action: Move Out -->
       <g transform="translate(250, 4)">
         <rect width="18" height="18" rx="3" fill="rgba(255,255,255,0.06)"/>
@@ -68,8 +68,8 @@
       <rect width="296" height="30" rx="6" fill="transparent"/>
       <path d="M10 12 L14 16 L18 12" stroke="#94a3b8" stroke-width="1.2" fill="none"/>
       <path d="M22 10 L26 10 L28 12 L35 12 C36 12 37 13 37 14 L37 20 C37 21 36 22 35 22 L22 22 C21 22 20 21 20 20 L20 12 C20 11 21 10 22 10 Z" fill="#4ade80"/>
-      <text x="42" y="20" class="font-base label-primary">插件架构重构</text>
-      <text x="126" y="20" class="font-base label-tertiary">(1)</text>
+      <text x="42" y="20" class="font-base label-primary">前端组件库</text>
+      <text x="108" y="20" class="font-base label-tertiary">(1)</text>
       <!-- Quick [+] Button -->
       <g transform="translate(266, 6)">
         <rect width="18" height="18" rx="3" fill="rgba(255,255,255,0.08)" />
@@ -81,7 +81,7 @@
     <g transform="translate(12, 148)">
       <rect width="296" height="30" rx="6" fill="rgba(255,255,255,0.06)"/>
       <path d="M12 9 C12 7.5 13.5 6 15 6 L23 6 C24.5 6 26 7.5 26 9 L26 14 C26 15.5 24.5 17 23 17 L16 17 L12 20 Z" fill="none" stroke="#60a5fa" stroke-width="1.2"/>
-      <text x="32" y="19" class="font-base" font-size="12" font-weight="600" fill="#93c5fd">TDAI 分层记忆中枢联调</text>
+      <text x="32" y="19" class="font-base" font-size="12" font-weight="600" fill="#93c5fd">全链路监控接入与日志采集</text>
 
       <!-- Hover Action Buttons -->
       <g transform="translate(210, 5)">
@@ -105,14 +105,14 @@
         <g transform="translate(8, 26)">
           <rect width="164" height="24" rx="4" fill="rgba(96,165,250,0.14)"/>
           <path d="M6 7 L8 7 L9 8 L14 8 C14.5 8 15 8.5 15 9 L15 13 C15 13.5 14.5 14 14 14 L6 14 C5.5 14 5 13.5 5 13 L5 8 C5 7.5 5.5 7 6 7 Z" fill="#38bdf8"/>
-          <text x="22" y="16" class="font-base" font-size="11" fill="#93c5fd" font-weight="500">📁 数据库分析工具</text>
+          <text x="22" y="16" class="font-base" font-size="11" fill="#93c5fd" font-weight="500">📁 核心后端模块</text>
         </g>
 
         <!-- Dropdown Option 2 -->
         <g transform="translate(8, 52)">
           <rect width="164" height="24" rx="4" fill="transparent"/>
           <path d="M6 7 L8 7 L9 8 L14 8 C14.5 8 15 8.5 15 9 L15 13 C15 13.5 14.5 14 14 14 L6 14 C5.5 14 5 13.5 5 13 L5 8 C5 7.5 5.5 7 6 7 Z" fill="#4ade80"/>
-          <text x="22" y="16" class="font-base" font-size="11" fill="#cbd5e1">📁 插件架构重构</text>
+          <text x="22" y="16" class="font-base" font-size="11" fill="#cbd5e1">📁 前端组件库</text>
         </g>
 
         <!-- Dropdown Option 3: New Folder Action -->

@@ -10,8 +10,8 @@ vi.mock('../src/client/api.ts', () => ({
 
 describe('TreeStore', () => {
   let store: TreeStore
-  const ws1 = '/home/ppz/project/dsh'
-  const ws2 = '/home/ppz/桌面'
+  const ws1 = '/workspace/project-alpha'
+  const ws2 = '/workspace/project-beta'
 
   beforeEach(() => {
     store = new TreeStore()

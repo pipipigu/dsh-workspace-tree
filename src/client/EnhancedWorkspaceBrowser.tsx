@@ -428,20 +428,6 @@ export const EnhancedWorkspaceBrowser: React.FC<EnhancedWorkspaceBrowserProps> =
     setShowSearch(false)
   }
 
-  const handlePickFromOS = async () => {
-    setFlowOpen(true)
-    if (props.pickDirectory) {
-      try {
-        const picked = await props.pickDirectory()
-        if (picked) {
-          await flowOwner.onPicked(picked)
-        }
-      } catch (err) {
-        console.warn('[dsh-workspace-tree] pickDirectory failed:', err)
-      }
-    }
-  }
-
   const handleConfirmAddWorkspace = async (customPath?: string) => {
     const targetPath = (customPath || newWorkspacePath).trim()
     if (!targetPath) {
@@ -572,7 +558,7 @@ export const EnhancedWorkspaceBrowser: React.FC<EnhancedWorkspaceBrowserProps> =
                   borderRadius: '6px',
                   fontSize: '13px',
                 }}
-                placeholder="/home/ppz/project/my-workspace"
+                placeholder="/path/to/your/project"
                 value={newWorkspacePath}
                 onChange={(e) => setNewWorkspacePath(e.target.value)}
                 onKeyDown={(e) => {
@@ -585,81 +571,82 @@ export const EnhancedWorkspaceBrowser: React.FC<EnhancedWorkspaceBrowserProps> =
               )}
             </div>
 
-            {/* Quick Presets */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <span style={{ fontSize: '11px', color: '#64748b' }}>快速填入参考目录:</span>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                {['/home/ppz/project', '/home/ppz/project/dsh', '/home/ppz'].map((p) => (
-                  <button
-                    key={p}
-                    style={{
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
-                      color: '#cbd5e1',
-                      borderRadius: '4px',
-                      padding: '2px 8px',
-                      fontSize: '11px',
-                      cursor: 'pointer',
-                      transition: 'all 0.15s ease',
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(96, 165, 250, 0.15)')}
-                    onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)')}
-                    onClick={() => setNewWorkspacePath(p)}
-                  >
-                    {p}
-                  </button>
-                ))}
+            {/* Quick Suggestions from existing workspace parents */}
+            {items.length > 0 && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <span style={{ fontSize: '11px', color: '#64748b' }}>快速填入参考目录:</span>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                  {Array.from(
+                    new Set(
+                      items
+                        .map((w) => w.path)
+                        .filter(Boolean)
+                        .flatMap((p) => [p, p.split('/').slice(0, -1).join('/') || '/'])
+                        .filter((p) => p && p !== '/'),
+                    ),
+                  )
+                    .slice(0, 4)
+                    .map((p) => (
+                      <button
+                        key={p}
+                        style={{
+                          background: 'rgba(255, 255, 255, 0.05)',
+                          border: '1px solid rgba(255, 255, 255, 0.1)',
+                          color: '#cbd5e1',
+                          borderRadius: '4px',
+                          padding: '2px 8px',
+                          fontSize: '11px',
+                          cursor: 'pointer',
+                          maxWidth: '240px',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          transition: 'all 0.15s ease',
+                        }}
+                        title={p}
+                        onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(96, 165, 250, 0.15)')}
+                        onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)')}
+                        onClick={() => setNewWorkspacePath(p)}
+                      >
+                        {p}
+                      </button>
+                    ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Modal Actions */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '6px', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '8px', paddingTop: '6px', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
               <button
                 style={{
                   background: 'transparent',
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  border: 'none',
                   color: '#94a3b8',
-                  borderRadius: '6px',
                   padding: '6px 12px',
                   fontSize: '12px',
                   cursor: 'pointer',
                 }}
-                onClick={handlePickFromOS}
+                onClick={() => setIsAddModalOpen(false)}
               >
-                📂 浏览系统目录...
+                取消
               </button>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <button
-                  style={{
-                    background: 'transparent',
-                    border: 'none',
-                    color: '#94a3b8',
-                    padding: '6px 12px',
-                    fontSize: '12px',
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => setIsAddModalOpen(false)}
-                >
-                  取消
-                </button>
-                <button
-                  disabled={isSubmittingWs}
-                  style={{
-                    background: '#2563eb',
-                    border: 'none',
-                    color: '#fff',
-                    borderRadius: '6px',
-                    padding: '6px 14px',
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    cursor: isSubmittingWs ? 'not-allowed' : 'pointer',
-                    opacity: isSubmittingWs ? 0.6 : 1,
-                  }}
-                  onClick={() => handleConfirmAddWorkspace()}
-                >
-                  {isSubmittingWs ? '正在创建...' : '创建并进入'}
-                </button>
-              </div>
+              <button
+                disabled={isSubmittingWs}
+                style={{
+                  background: '#2563eb',
+                  border: 'none',
+                  color: '#fff',
+                  borderRadius: '6px',
+                  padding: '6px 14px',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  cursor: isSubmittingWs ? 'not-allowed' : 'pointer',
+                  opacity: isSubmittingWs ? 0.6 : 1,
+                }}
+                onClick={() => handleConfirmAddWorkspace()}
+              >
+                {isSubmittingWs ? '正在创建...' : '创建并进入'}
+              </button>
             </div>
           </div>
         </div>
