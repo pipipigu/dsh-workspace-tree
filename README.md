@@ -1,7 +1,10 @@
 # 🌲 dsh-workspace-tree
 
-> **Virtual Session Folder Grouping, Move-to-Folder Menu, and Nested Workspace Subproject Manager for DeepSeek Harness (DSH).**  
-> 为 DeepSeek Harness 打造的原生融合式会话分类树、文件夹管理、点击式移动菜单与嵌套子项目管理器。
+<p align="center">
+  <strong>English</strong> | <strong><a href="./README.zh.md">简体中文</a></strong>
+</p>
+
+> **Virtual Session Folder Grouping, Move-to-Folder Menu, and Nested Workspace Subproject Manager for DeepSeek Harness (DSH).**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![DSH Plugin](https://img.shields.io/badge/DSH-Plugin-success.svg)](https://github.com/pipipigu/dsh-workspace-tree)
@@ -10,107 +13,106 @@
 
 ---
 
-## 📸 界面效果预览 (Visual Previews)
+## 📸 Visual Previews
 
-### 1. 侧边栏全景与核心特性概览 (Sidebar Overview)
+### 1. Sidebar Overview & Core Features
 
-![dsh-workspace-tree 侧边栏全景演示](docs/preview-main.svg)
-
----
-
-### 2. 点击式精准移动与快捷归类演示 (Move-to-Folder Interaction)
-
-![dsh-workspace-tree 点击式精准移动菜单演示](docs/preview-move-menu.svg)
+![dsh-workspace-tree Sidebar Overview](docs/preview-main.svg)
 
 ---
 
-## 🌟 核心特性 (Key Features)
+### 2. Precision Click-to-Move Folder Menu
 
-- **📁 纯虚拟会话分类文件夹 (Virtual Session Folders)**
-  - **零物理侵入**：绝不挪动底层会话文件或目录结构，元数据以极简 JSON 原子持久化于工作区根目录 `.dsh/workspace-tree.json`；
-  - **多工作区多路常驻**：每个工作区拥有完全独立的分类树与置顶队列，跨工作区切换时文件夹始终稳固展示，永不闪退或丢失；
-  - **分类完整生命周期**：支持一键新建文件夹、双击行内就地重命名、自定义颜色标记及删除（删除文件夹时内部会话安全回退至未分类）。
-
-- **➕ 文件夹一键直建会话 (Folder-Scoped New Session)**
-  - 悬停在任意文件夹行上点击 **`[+]`** 按钮，直接在当前工作区启动新会话，并**原子级直属归入该文件夹内部**，杜绝时序竞态与老会话串扰。
-
-- **🚀 顶部进行中/待读任务中枢 (Active Task Banner & Read-to-Dismiss)**
-  - **28px 单行精致胶囊**：置顶展示所有正在进行中与已完成待读的会话；
-  - **生命周期平滑流转**：生成中呈**蓝光呼吸脉冲** -> 后台完成后平滑转为**绿光常驻 `[待读]` 态** -> 点击阅读或跳转后**自动优雅消除**；
-  - **一键直达与展开**：点击胶囊秒级直达会话，并自动联动展开所在工作区与对应文件夹。
-
-- **📂 点击式「移动至文件夹」菜单 (Move-to-Folder Menu)**
-  - **零误触设计**：彻底废弃狭窄侧边栏中容易误选文字与手抖放错的拖拽机制，采用纯净点击式下拉菜单；
-  - **快速归类与新建**：悬停点击会话行上的「📁 移动」图标，即刻弹出目标文件夹面板，支持一键选择分类或就地新建文件夹并移入；
-  - **一键快捷移出**：文件夹内会话提供专属「移出」图标，点击瞬时退回未分类。
-
-- **📌 会话置顶、双击重命名与分页流 (Pinning, Inline Rename & Pagination)**
-  - 支持会话置顶（置顶会话自动排在最前）；
-  - 双击会话行快速激活重命名编辑框；
-  - 默认展示最新 10 条会话，底部提供「展开其余 N 个会话」无感按需加载。
-
-- **🎨 原生侧边栏深度接管 (Native Single Slot Shadowing)**
-  - 基于 DSH 核心 `sidebar.workspaces` 槽位以 `priority: -10` 无缝深度接管，完美适配 DSH 原生深色/浅色调色板（`--dsw-*`）；
-  - 全量采用 **Pure SVG** 矢量图形体系，视觉纯净高雅，杜绝 Emoji 杂乱干扰。
-
-- **⚡ 0ms 版本快照响应式引擎 (0ms Reactive TreeStore)**
-  - 采用基于版本递增快照的 `useSyncExternalStore` 响应式状态机，任何移动、重命名、归类操作 **0ms 瞬间触发视图重渲染**。
+![dsh-workspace-tree Move-to-Folder Interaction](docs/preview-move-menu.svg)
 
 ---
 
-## 📦 安装与启用 (Installation)
+## 🌟 Key Features
 
-### 方式 A：GitHub 一键安装（推荐）
+- **📁 Virtual Session Folders**
+  - **Zero Filesystem Pollution**: Never moves or modifies underlying conversation logs or physical directories. Metadata is atomically persisted at `.dsh/workspace-tree.json`.
+  - **Multi-Workspace Stability**: Independent classification and pin queue per workspace. Folders remain persistent and stable across workspace switches.
+  - **Full Folder Lifecycle**: Create, inline rename (double-click), custom color badge, and delete (internal sessions safely fallback to uncategorized).
 
-在 DSH 客户端或终端中执行：
+- **➕ Folder-Scoped Session Creation**
+  - Hover on any folder and click **`[+]`** to start a new conversation **directly inside that targeted folder** with atomic SessionId binding, avoiding race conditions.
+
+- **🚀 Active Task Banner & Read-to-Dismiss**
+  - **Compact 28px Top Capsule**: Pins active running tasks and unread completed conversations at the top of the sidebar.
+  - **Smooth Lifecycle Transition**: Pulsing blue dot during generation -> persistent green `[Unread]` badge when completed in background -> automatically dismissed upon reading.
+  - **Deep-Jump & Auto-Expand**: One-click navigation that automatically expands the parent workspace and folder.
+
+- **📂 Precision Move-to-Folder Dropdown Menu**
+  - **Zero Misclicks**: Replaced awkward sidebar drag-and-drop with a crisp, reliable click-to-move dropdown menu.
+  - **Instant Categorization**: Quick folder selection or inline new folder creation; dedicated eject button inside folders to return sessions to uncategorized.
+
+- **📌 Session Pinning, Inline Rename & Pagination**
+  - Pin important sessions to the top of the workspace.
+  - Double-click any session title to activate inline renaming.
+  - Displays top 10 sessions by default with an expander for remaining items.
+
+- **🎨 Native Single Slot Shadowing**
+  - Seamlessly shadows the native `sidebar.workspaces` slot with `priority: -10`, blending with DSH dark/light color schemes (`--dsw-*`).
+  - Pure SVG vector icons with zero emoji clutter.
+
+- **⚡ 0ms Reactive Engine (Version Snapshot)**
+  - Powered by `useSyncExternalStore` with immutable version increment snapshots, ensuring instant 0ms UI re-renders on any action.
+
+---
+
+## 📦 Installation
+
+### Option A: Install from GitHub (Recommended)
+
+Run the following command in your terminal:
 
 ```bash
 dsh plugin --profile web add github:pipipigu/dsh-workspace-tree
 ```
 
-重启 DSH Web 实例（或刷新页面）即可体验！
+Restart your DSH Web instance (or refresh the browser) to enjoy!
 
-### 方式 B：本地开发与软链调试
+### Option B: Local Development (Link Mode)
 
 ```bash
-# 1. 克隆仓库
+# 1. Clone repository
 git clone https://github.com/pipipigu/dsh-workspace-tree.git
 cd dsh-workspace-tree
 
-# 2. 安装依赖并构建
+# 2. Install dependencies & build
 pnpm install
 pnpm build
 
-# 3. 软链挂载至 DSH Web Profile
+# 3. Link to DSH Web Profile
 dsh plugin --profile web add link:$(pwd)
 ```
 
 ---
 
-## 🏗️ 架构与数据流 (Architecture)
+## 🏗️ Architecture & Data Flow
 
-![dsh-workspace-tree 系统架构与数据流](docs/architecture.svg)
+![dsh-workspace-tree Architecture & Data Flow](docs/architecture.svg)
 
 ---
 
-## 🛠️ 本地开发与指令 (Development)
+## 🛠️ Development & Commands
 
 ```bash
-# 依赖安装
+# Install dependencies
 pnpm install
 
-# 类型检查 (0 错误)
+# Type checking (0 errors)
 pnpm typecheck
 
-# 单元测试 (Vitest)
+# Unit tests (Vitest)
 pnpm test
 
-# 打包构建 (生成 lib/index.js 与 lib/client.js)
+# Production build (generates lib/index.js & lib/client.js)
 pnpm build
 ```
 
 ---
 
-## 📄 开源协议 (License)
+## 📄 License
 
-本项目基于 [MIT License](LICENSE) 协议开源。
+This project is licensed under the [MIT License](LICENSE).
