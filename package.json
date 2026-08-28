@@ -1,7 +1,23 @@
 {
   "name": "@dsh-external/dsh-workspace-tree",
-  "description": "Virtual session folder grouping and nested workspace subproject manager for DeepSeek Harness (DSH).",
+  "description": "Virtual session folder grouping, drag & drop, and subproject manager for DeepSeek Harness (DSH).",
   "version": "0.1.0",
+  "author": "pipipigu",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pipipigu/dsh-workspace-tree.git"
+  },
+  "homepage": "https://github.com/pipipigu/dsh-workspace-tree#readme",
+  "keywords": [
+    "deepseek",
+    "deepseek-harness",
+    "dsh-plugin",
+    "cordis",
+    "workspace-manager",
+    "session-manager",
+    "folder-tree"
+  ],
   "type": "module",
   "main": "lib/index.js",
   "types": "lib/types/plugin/index.d.ts",
@@ -45,7 +61,6 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
   },
-  "license": "MIT",
   "dependencies": {},
   "peerDependencies": {
     "@deepseek-ai/cordis": "^4.0.1"

@@ -1,43 +1,132 @@
-# @dsh-external/dsh-workspace-tree
+# 🌲 dsh-workspace-tree
 
-DeepSeek Harness (DSH) 虚拟会话分类与嵌套工作区管理器插件。
+> **Virtual Session Folder Grouping, Drag & Drop, and Nested Workspace Subproject Manager for DeepSeek Harness (DSH).**  
+> 为 DeepSeek Harness 打造的原生融合式会话分类树、文件夹管理、拖拽归类与嵌套子项目管理器。
 
-## 🌟 核心特性
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![DSH Plugin](https://img.shields.io/badge/DSH-Plugin-success.svg)](https://github.com/pipipigu/dsh-workspace-tree)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178c6.svg)](https://www.typescriptlang.org/)
+[![Vitest](https://img.shields.io/badge/tested%20with-vitest-6e9f18.svg)](https://vitest.dev/)
 
-1. **工作区内纯虚拟会话文件夹分类（Virtual Session Folders）**
-   - 零侵入、零破坏：不挪动底层会话物理文件，元数据持久化于项目根目录 `.dsh/workspace-tree.json`；
-   - 顶部常驻「📥 未分类会话 (Inbox)」收件箱分区，新会话自动沉淀；
-   - 支持新建、重命名、删除分类文件夹，并支持自定义文件夹徽标颜色；
-   - 原生 HTML5 拖拽（Drag & Drop）支持：支持自由拖拽会话归类或移回收件箱；
-   - 展开/折叠状态按工作区独立记忆。
+---
 
-2. **父子嵌套工作区与子项目管理（Nested Subprojects）**
-   - 自动嗅探识别子工程（Node / Rust / Python / Java / Go / 通用工程）；
-   - 在子工程节点下一键创建独立原生会话，其 `CWD`、代码图谱（CodeGraph）、项目记忆与规则 100% 对齐子工程隔离环境。
+## 🌟 核心特性 (Key Features)
 
-3. **原生侧边栏无感增强（Native Sidebar Enhancement）**
-   - 直接无缝融合进 DSH 原生侧边栏，自适应暗色/亮色主题（`--dsw-*`）；
-   - Local-First 响应式状态机（TreeStore），操作即时响应并异步落盘。
+- **📁 纯虚拟会话分类文件夹 (Virtual Session Folders)**
+  - **零物理侵入**：绝不挪动底层会话文件或目录结构，元数据以极简 JSON 原子持久化于工作区根目录 `.dsh/workspace-tree.json`；
+  - **多工作区多路常驻**：每个工作区拥有完全独立的分类树与置顶队列，跨工作区切换时文件夹始终稳固展示，永不闪退或丢失；
+  - **分类完整生命周期**：支持一键新建文件夹、双击行内就地重命名、自定义颜色标记及删除（删除文件夹时内部会话安全回退至未分类）。
 
-## 📦 安装与启用
+- **➕ 文件夹一键直建会话 (Folder-Scoped New Session)**
+  - 悬停在任意文件夹行上点击 **`[+]`** 按钮，直接在当前工作区启动新会话，并**原子级直属归入该文件夹内部**，杜绝异步时序竞态与老会话串扰。
+
+- **🚀 顶部进行中/待读任务中枢 (Active Task Banner & Read-to-Dismiss)**
+  - **28px 单行精致胶囊**：置顶展示所有正在进行中与已完成待读的会话；
+  - **生命周期平滑流转**：生成中呈**蓝光呼吸脉冲** -> 后台完成后平滑转为**绿光常驻 `[待读]` 态** -> 点击阅读或跳转后**自动优雅消除**；
+  - **一键直达与展开**：点击胶囊秒级直达会话，并自动联动展开所在工作区与对应文件夹。
+
+- **🖐️ 沉浸式流畅拖拽归类 (Smooth Drag & Drop with Dropzone)**
+  - **全链路防误触**：严格隔离文字选择（`user-select: none`），鼠标抓起任意会话卡片顺畅拖动；
+  - **文件夹高亮落点**：拖拽至文件夹悬停时呈现 `1px dashed #60a5fa` 蓝光高亮与「松开移入此处」明确指引；
+  - **未分类释放槽**：拖拽激活时自动浮现「拖放到此处 移出会话至未分类」专属释放区。
+
+- **📌 会话置顶、双击重命名与分页流 (Pinning, Inline Rename & Pagination)**
+  - 支持会话置顶（置顶会话自动排在最前）；
+  - 双击会话行快速激活重命名编辑框；
+  - 默认展示最新 10 条会话，底部提供「展开其余 N 个会话」无感按需加载。
+
+- **🎨 原生侧边栏深度接管 (Native Single Slot Shadowing)**
+  - 基于 DSH 核心 `sidebar.workspaces` 槽位以 `priority: -10` 无缝深度接管，完美适配 DSH 原生深色/浅色调色板（`--dsw-*`）；
+  - 全量采用 **Pure SVG** 矢量矢量图形体系，视觉纯净高雅，杜绝 Emoji 杂乱干扰。
+
+- **⚡ 0ms 版本快照响应式引擎 (0ms Reactive TreeStore)**
+  - 采用基于版本递增快照的 `useSyncExternalStore` 响应式状态机，任何移动、重命名、归类操作 **0ms 瞬间触发视图重渲染**。
+
+---
+
+## 📦 安装与启用 (Installation)
+
+### 方式 A：GitHub 一键安装（推荐）
+
+在 DSH 客户端或终端中执行：
 
 ```bash
-# 在当前 profile 添加本地插件
-dsh plugin --profile web add link:/home/ppz/project/dsh/dsh-workspace-tree
+dsh plugin --profile web add github:pipipigu/dsh-workspace-tree
 ```
 
-## 🛠️ 构建与测试
+重启 DSH Web 实例（或刷新页面）即可体验！
+
+### 方式 B：本地开发与软链调试
 
 ```bash
-# 类型检查
+# 1. 克隆仓库
+git clone https://github.com/pipipigu/dsh-workspace-tree.git
+cd dsh-workspace-tree
+
+# 2. 安装依赖并构建
+pnpm install
+pnpm build
+
+# 3. 软链挂载至 DSH Web Profile
+dsh plugin --profile web add link:$(pwd)
+```
+
+---
+
+## 🏗️ 架构与数据流 (Architecture)
+
+```mermaid
+flowchart TD
+    subgraph DSH[DeepSeek Harness Web GUI]
+      SLOT[sidebar.workspaces 槽位接管<br>priority: -10]
+      UI[EnhancedWorkspaceBrowser 组件]
+    end
+
+    subgraph Store[Local-First 响应式状态中枢]
+      TS[TreeStore 响应式字典<br>cache: Map&lt;wsPath, Meta&gt;]
+      VER[Version 快照订阅<br>0ms React 渲染驱动]
+    end
+
+    subgraph Host[DSH Host & Local Storage]
+      API[/api/dsh-workspace-tree/*<br>HTTP RPC 路由]
+      DISK[(.dsh/workspace-tree.json<br>原子 JSON 存储)]
+    end
+
+    SLOT --> UI
+    UI <-->|useSyncExternalStore| TS
+    TS --> VER
+    UI -->|增删改查 / 拖拽归类| TS
+    TS -->|异步落盘| API
+    API --> DISK
+
+    classDef web fill:#1a2332,stroke:#60a5fa,color:#93c5fd
+    classDef store fill:#1b2d20,stroke:#4ade80,color:#86efac
+    classDef host fill:#2d2416,stroke:#fbbf24,color:#fde68a
+    class SLOT,UI web
+    class TS,VER store
+    class API,DISK host
+```
+
+---
+
+## 🛠️ 本地开发与指令 (Development)
+
+```bash
+# 依赖安装
+pnpm install
+
+# 类型检查 (0 错误)
 pnpm typecheck
 
-# 单元测试
+# 单元测试 (Vitest)
 pnpm test
 
-# 打包构建
+# 打包构建 (生成 lib/index.js 与 lib/client.js)
 pnpm build
 ```
 
-## 📄 License
-MIT
+---
+
+## 📄 开源协议 (License)
+
+本项目基于 [MIT License](LICENSE) 协议开源。

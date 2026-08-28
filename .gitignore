@@ -1,3 +1,7 @@
 node_modules/
-lib/
 .dsh/
+*.tsbuildinfo
+lib/*.map
+.DS_Store
+*.log
+.scratch/
