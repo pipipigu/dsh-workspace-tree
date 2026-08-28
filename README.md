@@ -1,7 +1,7 @@
 # 🌲 dsh-workspace-tree
 
-> **Virtual Session Folder Grouping, Drag & Drop, and Nested Workspace Subproject Manager for DeepSeek Harness (DSH).**  
-> 为 DeepSeek Harness 打造的原生融合式会话分类树、文件夹管理、拖拽归类与嵌套子项目管理器。
+> **Virtual Session Folder Grouping, Move-to-Folder Menu, and Nested Workspace Subproject Manager for DeepSeek Harness (DSH).**  
+> 为 DeepSeek Harness 打造的原生融合式会话分类树、文件夹管理、点击式移动菜单与嵌套子项目管理器。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![DSH Plugin](https://img.shields.io/badge/DSH-Plugin-success.svg)](https://github.com/pipipigu/dsh-workspace-tree)
@@ -18,9 +18,9 @@
 
 ---
 
-### 2. 拖拽归类与落点交互反馈 (Drag & Drop Interaction)
+### 2. 点击式精准移动与快捷归类演示 (Move-to-Folder Interaction)
 
-![dsh-workspace-tree 拖拽与释放区演示](docs/preview-drag-drop.svg)
+![dsh-workspace-tree 点击式精准移动菜单演示](docs/preview-move-menu.svg)
 
 ---
 
@@ -32,17 +32,17 @@
   - **分类完整生命周期**：支持一键新建文件夹、双击行内就地重命名、自定义颜色标记及删除（删除文件夹时内部会话安全回退至未分类）。
 
 - **➕ 文件夹一键直建会话 (Folder-Scoped New Session)**
-  - 悬停在任意文件夹行上点击 **`[+]`** 按钮，直接在当前工作区启动新会话，并**原子级直属归入该文件夹内部**，杜绝异步时序竞态与老会话串扰。
+  - 悬停在任意文件夹行上点击 **`[+]`** 按钮，直接在当前工作区启动新会话，并**原子级直属归入该文件夹内部**，杜绝时序竞态与老会话串扰。
 
 - **🚀 顶部进行中/待读任务中枢 (Active Task Banner & Read-to-Dismiss)**
   - **28px 单行精致胶囊**：置顶展示所有正在进行中与已完成待读的会话；
   - **生命周期平滑流转**：生成中呈**蓝光呼吸脉冲** -> 后台完成后平滑转为**绿光常驻 `[待读]` 态** -> 点击阅读或跳转后**自动优雅消除**；
   - **一键直达与展开**：点击胶囊秒级直达会话，并自动联动展开所在工作区与对应文件夹。
 
-- **🖐️ 沉浸式流畅拖拽归类 (Smooth Drag & Drop with Dropzone)**
-  - **全链路防误触**：严格隔离文字选择（`user-select: none`），鼠标抓起任意会话卡片顺畅拖动；
-  - **文件夹高亮落点**：拖拽至文件夹悬停时呈现 `1px dashed #60a5fa` 蓝光高亮与「松开移入此处」明确指引；
-  - **未分类释放槽**：拖拽激活时自动浮现「拖放到此处 移出会话至未分类」专属释放区。
+- **📂 点击式「移动至文件夹」菜单 (Move-to-Folder Menu)**
+  - **零误触设计**：彻底废弃狭窄侧边栏中容易误选文字与手抖放错的拖拽机制，采用纯净点击式下拉菜单；
+  - **快速归类与新建**：悬停点击会话行上的「📁 移动」图标，即刻弹出目标文件夹面板，支持一键选择分类或就地新建文件夹并移入；
+  - **一键快捷移出**：文件夹内会话提供专属「移出」图标，点击瞬时退回未分类。
 
 - **📌 会话置顶、双击重命名与分页流 (Pinning, Inline Rename & Pagination)**
   - 支持会话置顶（置顶会话自动排在最前）；

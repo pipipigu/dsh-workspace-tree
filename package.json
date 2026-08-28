@@ -1,6 +1,6 @@
 {
   "name": "@dsh-external/dsh-workspace-tree",
-  "description": "Virtual session folder grouping, drag & drop, and subproject manager for DeepSeek Harness (DSH).",
+  "description": "Virtual session folder grouping, move-to-folder menu, and nested workspace subproject manager for DeepSeek Harness (DSH).",
   "version": "0.1.0",
   "author": "pipipigu",
   "license": "MIT",
