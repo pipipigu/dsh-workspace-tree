@@ -131,10 +131,6 @@ export const EnhancedWorkspaceBrowser: React.FC<EnhancedWorkspaceBrowserProps> =
   const [editingFolderId, setEditingFolderId] = useState<string | null>(null)
   const [editFolderName, setEditFolderName] = useState('')
 
-  // Drag and drop interactive visual states
-  const [draggingSessionId, setDraggingSessionId] = useState<string | null>(null)
-  const [dragOverTarget, setDragOverTarget] = useState<string | null>(null)
-
   // Local unread completion tracker (reactive to running true->false edge when not active)
   const [localUnreadSet, setLocalUnreadSet] = useState<Set<string>>(new Set())
   const prevRunningMap = useRef<Map<string, boolean>>(new Map())
@@ -892,9 +888,9 @@ export const EnhancedWorkspaceBrowser: React.FC<EnhancedWorkspaceBrowserProps> =
                             padding: '0 6px',
                             borderRadius: '6px',
                             cursor: 'pointer',
-                            color: dragOverTarget === folder.id ? 'var(--dsw-alias-state-business-primary, #93c5fd)' : 'var(--dsw-alias-label-primary, #e2e8f0)',
-                            background: dragOverTarget === folder.id ? 'rgba(96, 165, 250, 0.18)' : 'transparent',
-                            border: dragOverTarget === folder.id ? '1px dashed #60a5fa' : '1px solid transparent',
+                            color: 'var(--dsw-alias-label-primary, #e2e8f0)',
+                            background: 'transparent',
+                            border: '1px solid transparent',
                             fontSize: '12px',
                             transition: 'all 0.15s ease',
                           }}
@@ -907,36 +903,18 @@ export const EnhancedWorkspaceBrowser: React.FC<EnhancedWorkspaceBrowserProps> =
                             const actions = e.currentTarget.querySelector('.folder-actions') as HTMLElement
                             if (actions) actions.style.display = 'none'
                           }}
-                          onDragOver={(e) => {
-                            e.preventDefault()
-                            e.stopPropagation()
-                            if (dragOverTarget !== folder.id) setDragOverTarget(folder.id)
-                          }}
-                          onDragLeave={(e) => {
-                            if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-                              if (dragOverTarget === folder.id) setDragOverTarget(null)
-                            }
-                          }}
-                          onDrop={async (e) => {
-                            e.preventDefault()
-                            e.stopPropagation()
-                            setDragOverTarget(null)
-                            const sId = e.dataTransfer.getData('text/plain') || draggingSessionId
-                            setDraggingSessionId(null)
-                            if (sId) await globalTreeStore.moveSession(ws.path, sId, folder.id)
-                          }}
                         >
                           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', minWidth: 0, flex: 1 }}>
                             <ChevronRightIcon
                               size={10}
                               style={{
-                                color: dragOverTarget === folder.id ? '#60a5fa' : 'var(--dsw-alias-label-tertiary, #94a3b8)',
+                                color: 'var(--dsw-alias-label-tertiary, #94a3b8)',
                                 transform: folder.collapsed ? 'rotate(0deg)' : 'rotate(90deg)',
                                 transition: 'transform 0.15s ease',
                                 flexShrink: 0,
                               }}
                             />
-                            <FolderIcon size={14} color={dragOverTarget === folder.id ? '#60a5fa' : (folder.color || '#60a5fa')} style={{ flexShrink: 0 }} />
+                            <FolderIcon size={14} color={folder.color || '#60a5fa'} style={{ flexShrink: 0 }} />
                             {editingFolderId === folder.id ? (
                               <input
                                 autoFocus
@@ -969,9 +947,6 @@ export const EnhancedWorkspaceBrowser: React.FC<EnhancedWorkspaceBrowserProps> =
                               </span>
                             )}
                             <span style={{ fontSize: '11px', color: 'var(--dsw-alias-label-tertiary, #64748b)' }}>({folderSessions.length})</span>
-                            {dragOverTarget === folder.id && (
-                              <span style={{ fontSize: '10px', color: '#60a5fa', fontWeight: 600, paddingLeft: '4px' }}>松开移入此处</span>
-                            )}
                           </div>
 
                           {/* 🌟 文件夹操作栏：包含 [+] 在文件夹下直接新建会话 */}
@@ -1008,25 +983,6 @@ export const EnhancedWorkspaceBrowser: React.FC<EnhancedWorkspaceBrowserProps> =
                               flexDirection: 'column',
                               gap: '1px',
                               paddingLeft: '16px',
-                              minHeight: folderSessions.length === 0 ? '24px' : 'auto',
-                            }}
-                            onDragOver={(e) => {
-                              e.preventDefault()
-                              e.stopPropagation()
-                              if (dragOverTarget !== folder.id) setDragOverTarget(folder.id)
-                            }}
-                            onDragLeave={(e) => {
-                              if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-                                if (dragOverTarget === folder.id) setDragOverTarget(null)
-                              }
-                            }}
-                            onDrop={async (e) => {
-                              e.preventDefault()
-                              e.stopPropagation()
-                              setDragOverTarget(null)
-                              const sId = e.dataTransfer.getData('text/plain') || draggingSessionId
-                              setDraggingSessionId(null)
-                              if (sId) await globalTreeStore.moveSession(ws.path, sId, folder.id)
                             }}
                           >
                             {folderSessions.map((s) => {
@@ -1036,7 +992,6 @@ export const EnhancedWorkspaceBrowser: React.FC<EnhancedWorkspaceBrowserProps> =
                               return (
                                 <div
                                   key={s.id}
-                                  draggable={editingSessionId !== s.id}
                                   style={{
                                     display: 'flex',
                                     alignItems: 'center',
@@ -1044,16 +999,15 @@ export const EnhancedWorkspaceBrowser: React.FC<EnhancedWorkspaceBrowserProps> =
                                     height: '30px',
                                     padding: '0 6px',
                                     borderRadius: '6px',
-                                    cursor: 'grab',
+                                    cursor: 'pointer',
                                     userSelect: 'none',
                                     WebkitUserSelect: 'none',
                                     background: isActive ? 'var(--dsw-alias-interactive-bg-hover, rgba(255,255,255,0.06))' : 'transparent',
                                     color: isActive ? 'var(--dsw-alias-state-business-primary, #93c5fd)' : 'var(--dsw-alias-label-primary, #cbd5e1)',
                                     fontSize: '12px',
                                     fontWeight: isActive ? 600 : 400,
-                                    opacity: draggingSessionId === s.id ? 0.35 : 1,
-                                    border: draggingSessionId === s.id ? '1px dashed #60a5fa' : '1px solid transparent',
-                                    transition: 'opacity 0.15s ease',
+                                    border: '1px solid transparent',
+                                    transition: 'background 0.12s ease',
                                   }}
                                   onClick={() => handleOpenSession(s.id)}
                                   onDoubleClick={(e) => {
@@ -1072,16 +1026,6 @@ export const EnhancedWorkspaceBrowser: React.FC<EnhancedWorkspaceBrowserProps> =
                                     const tm = e.currentTarget.querySelector('.sess-time') as HTMLElement
                                     if (act) act.style.display = 'none'
                                     if (tm) tm.style.display = 'inline'
-                                  }}
-                                  onDragStart={(e) => {
-                                    e.stopPropagation()
-                                    e.dataTransfer.effectAllowed = 'move'
-                                    e.dataTransfer.setData('text/plain', s.id)
-                                    setDraggingSessionId(s.id)
-                                  }}
-                                  onDragEnd={() => {
-                                    setDraggingSessionId(null)
-                                    setDragOverTarget(null)
                                   }}
                                 >
                                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', minWidth: 0, flex: 1, pointerEvents: editingSessionId === s.id ? 'auto' : 'none' }}>
@@ -1226,46 +1170,6 @@ export const EnhancedWorkspaceBrowser: React.FC<EnhancedWorkspaceBrowserProps> =
                   })}
 
                   {/* B. Uncategorized Sessions (Sorted by time + Pinned First + 10 Limit) */}
-                  {/* 🌟 拖拽释放至未分类专属提示区域 */}
-                  {draggingSessionId && (
-                    <div
-                      style={{
-                        margin: '4px 0 6px',
-                        padding: '6px 8px',
-                        borderRadius: '6px',
-                        border: dragOverTarget === `root:${ws.workspaceId}` ? '1px dashed #60a5fa' : '1px dashed rgba(255, 255, 255, 0.25)',
-                        background: dragOverTarget === `root:${ws.workspaceId}` ? 'rgba(96, 165, 250, 0.16)' : 'rgba(255, 255, 255, 0.03)',
-                        color: dragOverTarget === `root:${ws.workspaceId}` ? 'var(--dsw-alias-state-business-primary, #93c5fd)' : 'var(--dsw-alias-label-tertiary, #94a3b8)',
-                        fontSize: '11px',
-                        cursor: 'pointer',
-                        transition: 'all 0.15s ease',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '6px',
-                      }}
-                      onDragOver={(e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                        if (dragOverTarget !== `root:${ws.workspaceId}`) setDragOverTarget(`root:${ws.workspaceId}`)
-                      }}
-                      onDragLeave={() => {
-                        if (dragOverTarget === `root:${ws.workspaceId}`) setDragOverTarget(null)
-                      }}
-                      onDrop={async (e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                        setDragOverTarget(null)
-                        const sId = e.dataTransfer.getData('text/plain') || draggingSessionId
-                        setDraggingSessionId(null)
-                        if (sId) await globalTreeStore.moveSession(ws.path, sId, null)
-                      }}
-                    >
-                      <MoveOutIcon size={12} />
-                      <span>{dragOverTarget === `root:${ws.workspaceId}` ? '松开移出至未分类' : '拖放到此处 移出会话至未分类'}</span>
-                    </div>
-                  )}
-
                   {visibleUncategorized.map((s) => {
                     const isActive = activeSessionId === s.id
                     const relTime = formatRelativeTime(s.updatedAt)
@@ -1273,7 +1177,6 @@ export const EnhancedWorkspaceBrowser: React.FC<EnhancedWorkspaceBrowserProps> =
                     return (
                       <div
                         key={s.id}
-                        draggable={editingSessionId !== s.id}
                         style={{
                           display: 'flex',
                           alignItems: 'center',
@@ -1281,16 +1184,15 @@ export const EnhancedWorkspaceBrowser: React.FC<EnhancedWorkspaceBrowserProps> =
                           height: '30px',
                           padding: '0 6px',
                           borderRadius: '6px',
-                          cursor: 'grab',
+                          cursor: 'pointer',
                           userSelect: 'none',
                           WebkitUserSelect: 'none',
                           background: isActive ? 'var(--dsw-alias-interactive-bg-hover, rgba(255,255,255,0.06))' : 'transparent',
                           color: isActive ? 'var(--dsw-alias-state-business-primary, #93c5fd)' : 'var(--dsw-alias-label-primary, #cbd5e1)',
                           fontSize: '12px',
                           fontWeight: isActive ? 600 : 400,
-                          opacity: draggingSessionId === s.id ? 0.35 : 1,
-                          border: draggingSessionId === s.id ? '1px dashed #60a5fa' : '1px solid transparent',
-                          transition: 'opacity 0.15s ease',
+                          border: '1px solid transparent',
+                          transition: 'background 0.12s ease',
                         }}
                         onClick={() => handleOpenSession(s.id)}
                         onDoubleClick={(e) => {
@@ -1309,16 +1211,6 @@ export const EnhancedWorkspaceBrowser: React.FC<EnhancedWorkspaceBrowserProps> =
                           const tm = e.currentTarget.querySelector('.sess-time') as HTMLElement
                           if (act) act.style.display = 'none'
                           if (tm) tm.style.display = 'inline'
-                        }}
-                        onDragStart={(e) => {
-                          e.stopPropagation()
-                          e.dataTransfer.effectAllowed = 'move'
-                          e.dataTransfer.setData('text/plain', s.id)
-                          setDraggingSessionId(s.id)
-                        }}
-                        onDragEnd={() => {
-                          setDraggingSessionId(null)
-                          setDragOverTarget(null)
                         }}
                       >
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', minWidth: 0, flex: 1, pointerEvents: editingSessionId === s.id ? 'auto' : 'none' }}>
