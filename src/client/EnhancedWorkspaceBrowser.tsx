@@ -23,6 +23,8 @@ import { CompletedDot, PendingDot, RunningDot } from './components/StateIndicato
 export interface EnhancedWorkspaceBrowserProps {
   useWorkspaces?: (selector: (s: any) => any) => any
   useSessions?: (selector: (s: any) => any) => any
+  renderSlot?: (slotName: string, owner?: any) => React.ReactNode
+  useDirectoryFlow?: (selector: (occupied: boolean) => any) => any
   startSession?: (workspaceId?: WorkspaceId) => void
   startSessionInFolder?: (workspaceId: WorkspaceId, wsPath: string, folderId: string) => Promise<void>
   open?: (sessionId: SessionId) => void
@@ -380,29 +382,57 @@ export const EnhancedWorkspaceBrowser: React.FC<EnhancedWorkspaceBrowserProps> =
     })
   }, [items, searchQuery, sessionsState.byId, archivedSet])
 
+  // DSH 原生 DirectoryFlow 交互状态
+  const [flowOpen, setFlowOpen] = useState(false)
+  const [pickingFolder, setPickingFolder] = useState(false)
+
+  const flowOwner = {
+    open: flowOpen,
+    busy: pickingFolder,
+    onPicked: async (path: string) => {
+      setPickingFolder(true)
+      try {
+        const res = await props.createWorkspace?.({ path })
+        if (res) {
+          const wsId = (res as any).workspaceId || (res as any).id
+          if (wsId) {
+            setExpandedWorkspaces((prev) => new Set([...prev, wsId]))
+            props.startSession?.(wsId)
+          }
+          globalTreeStore.loadWorkspace(path)
+        }
+      } catch (err) {
+        console.error('[dsh-workspace-tree] Create workspace from flow failed:', err)
+      } finally {
+        setPickingFolder(false)
+        setFlowOpen(false)
+      }
+    },
+    onCancel: () => {
+      setFlowOpen(false)
+    },
+    onError: (msg: string) => {
+      console.warn('[dsh-workspace-tree] Directory flow error:', msg)
+      setFlowOpen(false)
+    },
+  }
+
   const handleOpenAddWorkspace = async () => {
-    try {
-      if (props.pickDirectory) {
+    // 1. 触发 DSH 自身的 directoryFlow 原生目录流程
+    setFlowOpen(true)
+
+    // 2. 如果支持原生 pickDirectory，也一并触发
+    if (props.pickDirectory) {
+      try {
         const picked = await props.pickDirectory()
         if (picked) {
-          const res = await props.createWorkspace?.({ path: picked })
-          if (res) {
-            const wsId = (res as any).workspaceId || (res as any).id
-            if (wsId) {
-              setExpandedWorkspaces((prev) => new Set([...prev, wsId]))
-              props.startSession?.(wsId)
-            }
-            globalTreeStore.loadWorkspace(picked)
-            return
-          }
+          await flowOwner.onPicked(picked)
+          return
         }
+      } catch {
+        // ignore
       }
-    } catch {
-      // ignore
     }
-    // Fallback: show inline input for manual absolute path
-    setIsAddingWorkspace(true)
-    setShowSearch(false)
   }
 
   const handleConfirmAddWorkspace = async () => {
@@ -1474,6 +1504,9 @@ export const EnhancedWorkspaceBrowser: React.FC<EnhancedWorkspaceBrowserProps> =
           )
         })}
       </div>
+
+      {/* 🌟 渲染 DSH 原生 directoryFlow 子槽位 (拉起 DSH 自身自带的目录选择弹窗或系统选择器) */}
+      {props.renderSlot?.('sidebar.workspaces.directoryFlow', flowOwner)}
     </div>
   )
 }

@@ -3,6 +3,8 @@ import type { SessionId, WorkspaceId, WorkspaceView } from '@deepseek-ai/dsh-cli
 export interface EnhancedWorkspaceBrowserProps {
     useWorkspaces?: (selector: (s: any) => any) => any;
     useSessions?: (selector: (s: any) => any) => any;
+    renderSlot?: (slotName: string, owner?: any) => React.ReactNode;
+    useDirectoryFlow?: (selector: (occupied: boolean) => any) => any;
     startSession?: (workspaceId?: WorkspaceId) => void;
     startSessionInFolder?: (workspaceId: WorkspaceId, wsPath: string, folderId: string) => Promise<void>;
     open?: (sessionId: SessionId) => void;
