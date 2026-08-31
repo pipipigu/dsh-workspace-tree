@@ -305,3 +305,47 @@ export const CloseIcon: React.FC<{ size?: number; style?: React.CSSProperties }>
     />
   </svg>
 )
+
+export const HomeIcon: React.FC<{ size?: number; style?: React.CSSProperties }> = ({
+  size = 14,
+  style,
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    style={style}
+  >
+    <path
+      d="M2.5 6.5L8 2L13.5 6.5V13.5C13.5 13.7761 13.2761 14 13 14H9.5V9.5H6.5V14H3C2.72386 14 2.5 13.7761 2.5 13.5V6.5Z"
+      stroke="currentColor"
+      strokeWidth="1.25"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+)
+
+export const ArrowUpIcon: React.FC<{ size?: number; style?: React.CSSProperties }> = ({
+  size = 14,
+  style,
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    style={style}
+  >
+    <path
+      d="M8 12.5V3.5M4 7.5L8 3.5L12 7.5"
+      stroke="currentColor"
+      strokeWidth="1.25"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+)

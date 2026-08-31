@@ -20,19 +20,17 @@ import {
   TrashIcon,
 } from './components/Icons.tsx'
 import { CompletedDot, PendingDot, RunningDot } from './components/StateIndicator.tsx'
+import { DirectoryBrowserModal } from './components/DirectoryBrowserModal.tsx'
 
 export interface EnhancedWorkspaceBrowserProps {
   useWorkspaces?: (selector: (s: any) => any) => any
   useSessions?: (selector: (s: any) => any) => any
-  renderSlot?: (slotName: string, owner?: any) => React.ReactNode
-  useDirectoryFlow?: (selector: (occupied: boolean) => any) => any
   startSession?: (workspaceId?: WorkspaceId) => void
   startSessionInFolder?: (workspaceId: WorkspaceId, wsPath: string, folderId: string) => Promise<void>
   open?: (sessionId: SessionId) => void
   renameWorkspace?: (workspaceId: WorkspaceId, title: string) => Promise<void>
   deleteWorkspace?: (workspaceId: WorkspaceId) => Promise<void>
   createWorkspace?: (input: { path: string }) => Promise<WorkspaceView>
-  pickDirectory?: () => Promise<string | null>
   renameSession?: (sessionId: SessionId, title: string) => Promise<void>
   archiveSession?: (sessionId: SessionId) => Promise<void>
   forkSession?: (sessionId: SessionId) => void
@@ -385,74 +383,27 @@ export const EnhancedWorkspaceBrowser: React.FC<EnhancedWorkspaceBrowserProps> =
     })
   }, [items, searchQuery, sessionsState.byId, archivedSet])
 
-  // DSH 原生 DirectoryFlow 交互状态
-  const [flowOpen, setFlowOpen] = useState(false)
-  const [pickingFolder, setPickingFolder] = useState(false)
-
-  const flowOwner = {
-    open: flowOpen,
-    busy: pickingFolder,
-    onPicked: async (path: string) => {
-      setPickingFolder(true)
-      try {
-        const res = await props.createWorkspace?.({ path })
-        if (res) {
-          const wsId = (res as any).workspaceId || (res as any).id
-          if (wsId) {
-            setExpandedWorkspaces((prev) => new Set([...prev, wsId]))
-            props.startSession?.(wsId)
-          }
-          globalTreeStore.loadWorkspace(path)
-        }
-      } catch (err) {
-        console.error('[dsh-workspace-tree] Create workspace from flow failed:', err)
-      } finally {
-        setPickingFolder(false)
-        setFlowOpen(false)
-        setIsAddModalOpen(false)
-      }
-    },
-    onCancel: () => {
-      setFlowOpen(false)
-    },
-    onError: (msg: string) => {
-      console.warn('[dsh-workspace-tree] Directory flow error:', msg)
-      setFlowOpen(false)
-    },
-  }
-
   const handleOpenAddWorkspace = () => {
-    setAddWsError(null)
-    setNewWorkspacePath('')
-    setIsAddModalOpen(true)
     setShowSearch(false)
+    setIsAddModalOpen(true)
   }
 
-  const handleConfirmAddWorkspace = async (customPath?: string) => {
-    const targetPath = (customPath || newWorkspacePath).trim()
-    if (!targetPath) {
-      setAddWsError('请输入工作区目录的绝对路径')
-      return
-    }
-    setIsSubmittingWs(true)
-    setAddWsError(null)
+  const handleConfirmAddWorkspace = async (targetPath: string) => {
+    const trimmed = targetPath.trim()
+    if (!trimmed) return
     try {
-      const res = await props.createWorkspace?.({ path: targetPath })
+      const res = await props.createWorkspace?.({ path: trimmed })
       if (res) {
         const wsId = (res as any).workspaceId || (res as any).id
         if (wsId) {
           setExpandedWorkspaces((prev) => new Set([...prev, wsId]))
           props.startSession?.(wsId)
         }
-        globalTreeStore.loadWorkspace(targetPath)
+        globalTreeStore.loadWorkspace(trimmed)
         setIsAddModalOpen(false)
-        setNewWorkspacePath('')
       }
     } catch (err: any) {
       console.error('[dsh-workspace-tree] Create workspace failed:', err)
-      setAddWsError(err?.message || '创建工作区失败，请检查目录路径是否存在且有效')
-    } finally {
-      setIsSubmittingWs(false)
     }
   }
 
@@ -500,155 +451,29 @@ export const EnhancedWorkspaceBrowser: React.FC<EnhancedWorkspaceBrowserProps> =
         </div>
       </div>
 
-      {/* 🌟 添加/新建工作区居中对话框 (Modal Overlay & Card) */}
-      {isAddModalOpen && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 9999,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            background: 'rgba(0, 0, 0, 0.7)',
-            backdropFilter: 'blur(6px)',
-          }}
-          onClick={() => setIsAddModalOpen(false)}
-        >
-          <div
+      {/* 🌟 自研可视化选择工作区目录弹窗 (完全复刻 DSH 原生体验，零 Slot 冲突) */}
+      <DirectoryBrowserModal
+        open={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onConfirm={handleConfirmAddWorkspace}
+      />
+
+      {/* 紧凑搜索输入框 */}
+      {showSearch && (
+        <div style={{ padding: '2px 10px 6px' }}>
+          <input
+            autoFocus
             style={{
-              width: '420px',
-              maxWidth: '92vw',
-              borderRadius: '10px',
-              background: '#151b28',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-              boxShadow: '0 20px 45px rgba(0, 0, 0, 0.8)',
-              padding: '18px 20px',
-              color: '#f8fafc',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '14px',
+              ...DSH_INPUT_STYLE,
+              width: '100%',
+              height: '28px',
+              padding: '0 8px',
+              borderRadius: '6px',
             }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Modal Header */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <FolderIcon size={18} color="#60a5fa" />
-                <span style={{ fontSize: '14px', fontWeight: 600 }}>添加 / 新建工作区</span>
-              </div>
-              <button
-                style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '2px', display: 'inline-flex' }}
-                onClick={() => setIsAddModalOpen(false)}
-              >
-                <CloseIcon size={14} />
-              </button>
-            </div>
-
-            {/* Path Input */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <label style={{ fontSize: '12px', color: '#94a3b8' }}>目录绝对路径 (Directory Path):</label>
-              <input
-                autoFocus
-                style={{
-                  ...DSH_INPUT_STYLE,
-                  width: '100%',
-                  height: '34px',
-                  padding: '0 10px',
-                  borderRadius: '6px',
-                  fontSize: '13px',
-                }}
-                placeholder="/path/to/your/project"
-                value={newWorkspacePath}
-                onChange={(e) => setNewWorkspacePath(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') handleConfirmAddWorkspace()
-                  if (e.key === 'Escape') setIsAddModalOpen(false)
-                }}
-              />
-              {addWsError && (
-                <span style={{ fontSize: '11px', color: '#f87171' }}>{addWsError}</span>
-              )}
-            </div>
-
-            {/* Quick Suggestions from existing workspace parents */}
-            {items.length > 0 && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <span style={{ fontSize: '11px', color: '#64748b' }}>快速填入参考目录:</span>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                  {Array.from(
-                    new Set(
-                      items
-                        .map((w) => w.path)
-                        .filter(Boolean)
-                        .flatMap((p) => [p, p.split('/').slice(0, -1).join('/') || '/'])
-                        .filter((p) => p && p !== '/'),
-                    ),
-                  )
-                    .slice(0, 4)
-                    .map((p) => (
-                      <button
-                        key={p}
-                        style={{
-                          background: 'rgba(255, 255, 255, 0.05)',
-                          border: '1px solid rgba(255, 255, 255, 0.1)',
-                          color: '#cbd5e1',
-                          borderRadius: '4px',
-                          padding: '2px 8px',
-                          fontSize: '11px',
-                          cursor: 'pointer',
-                          maxWidth: '240px',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap',
-                          transition: 'all 0.15s ease',
-                        }}
-                        title={p}
-                        onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(96, 165, 250, 0.15)')}
-                        onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)')}
-                        onClick={() => setNewWorkspacePath(p)}
-                      >
-                        {p}
-                      </button>
-                    ))}
-                </div>
-              </div>
-            )}
-
-            {/* Modal Actions */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '8px', paddingTop: '6px', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
-              <button
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  color: '#94a3b8',
-                  padding: '6px 12px',
-                  fontSize: '12px',
-                  cursor: 'pointer',
-                }}
-                onClick={() => setIsAddModalOpen(false)}
-              >
-                取消
-              </button>
-              <button
-                disabled={isSubmittingWs}
-                style={{
-                  background: '#2563eb',
-                  border: 'none',
-                  color: '#fff',
-                  borderRadius: '6px',
-                  padding: '6px 14px',
-                  fontSize: '12px',
-                  fontWeight: 600,
-                  cursor: isSubmittingWs ? 'not-allowed' : 'pointer',
-                  opacity: isSubmittingWs ? 0.6 : 1,
-                }}
-                onClick={() => handleConfirmAddWorkspace()}
-              >
-                {isSubmittingWs ? '正在创建...' : '创建并进入'}
-              </button>
-            </div>
-          </div>
+            placeholder="搜索工作区或会话..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
       )}
 
@@ -1623,9 +1448,6 @@ export const EnhancedWorkspaceBrowser: React.FC<EnhancedWorkspaceBrowserProps> =
           )
         })}
       </div>
-
-      {/* 🌟 渲染 DSH 原生 directoryFlow 子槽位 (拉起 DSH 自身自带的目录选择弹窗或系统选择器) */}
-      {props.renderSlot?.('sidebar.workspaces.directoryFlow', flowOwner)}
     </div>
   )
 }

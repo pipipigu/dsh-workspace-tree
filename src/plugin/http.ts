@@ -4,6 +4,9 @@
 
 import type { Context } from '@deepseek-ai/cordis'
 import type { IncomingMessage, ServerResponse } from 'node:http'
+import { readdir, mkdir, stat } from 'node:fs/promises'
+import { homedir } from 'node:os'
+import { resolve, dirname, join } from 'node:path'
 import type { WorkspaceTreeMeta } from '../shared/types.ts'
 import { readWorkspaceTreeMeta, writeWorkspaceTreeMeta } from './storage.ts'
 import { scanSubprojects } from './scanner.ts'
@@ -87,6 +90,62 @@ export function registerHttpRoutes(ctx: Context): () => void {
           const workspaceRoot = url.searchParams.get('workspaceRoot') || process.cwd()
           const subprojects = await scanSubprojects(workspaceRoot)
           sendJson(res, 200, { success: true, subprojects })
+          return
+        }
+
+        // 🌟 目录树列表 API (供可视化目录选择器使用)
+        if (req.method === 'GET' && subPath === '/fs-list') {
+          const rawTarget = url.searchParams.get('path')
+          const showHidden = url.searchParams.get('showHidden') === 'true'
+          const home = homedir()
+          const target = rawTarget ? resolve(rawTarget) : home
+
+          try {
+            const dirents = await readdir(target, { withFileTypes: true })
+            const directories: Array<{ name: string; path: string }> = []
+
+            for (const dirent of dirents) {
+              if (!dirent.isDirectory()) continue
+              if (!showHidden && dirent.name.startsWith('.')) continue
+              directories.push({
+                name: dirent.name,
+                path: join(target, dirent.name),
+              })
+            }
+
+            directories.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }))
+
+            const parentPath = target === '/' ? null : dirname(target)
+            sendJson(res, 200, {
+              success: true,
+              currentPath: target,
+              parentPath,
+              homePath: home,
+              directories,
+            })
+          } catch (fsErr: any) {
+            sendJson(res, 200, {
+              success: false,
+              error: fsErr?.message || '无法读取该目录',
+              currentPath: target,
+              parentPath: target === '/' ? null : dirname(target),
+              homePath: home,
+              directories: [],
+            })
+          }
+          return
+        }
+
+        // 🌟 新建目录 API
+        if (req.method === 'POST' && subPath === '/fs-mkdir') {
+          const body = await readBodyJson<{ parentPath?: string; name?: string }>(req)
+          if (!body.parentPath || !body.name) {
+            sendJson(res, 400, { success: false, error: 'Missing parentPath or name' })
+            return
+          }
+          const fullPath = join(resolve(body.parentPath), body.name.trim())
+          await mkdir(fullPath, { recursive: true })
+          sendJson(res, 200, { success: true, path: fullPath })
           return
         }
 

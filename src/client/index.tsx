@@ -42,7 +42,6 @@ export function apply(ctx: ClientContext): void {
               await ctx.workspaces?.delete?.(workspaceId)
             },
             createWorkspace: (input: { path: string }) => ctx.workspaces?.create?.(input),
-            pickDirectory: () => ctx.workspaces?.pickDirectory?.(),
             renameSession: async (sessionId: SessionId, title: string) => {
               const session = ctx.sessions?.binding?.(sessionId)?.session
               if (session) {

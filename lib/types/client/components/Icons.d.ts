@@ -58,3 +58,11 @@ export declare const CloseIcon: React.FC<{
     size?: number;
     style?: React.CSSProperties;
 }>;
+export declare const HomeIcon: React.FC<{
+    size?: number;
+    style?: React.CSSProperties;
+}>;
+export declare const ArrowUpIcon: React.FC<{
+    size?: number;
+    style?: React.CSSProperties;
+}>;

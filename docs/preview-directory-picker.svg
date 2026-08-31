@@ -1,0 +1,189 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 520" width="880" height="520">
+  <defs>
+    <linearGradient id="bgGradPicker" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b0f19" />
+      <stop offset="100%" stop-color="#111827" />
+    </linearGradient>
+    <linearGradient id="modalGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#151b28" />
+      <stop offset="100%" stop-color="#101520" />
+    </linearGradient>
+  </defs>
+
+  <style>
+    .font-base { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    .title { font-size: 14px; font-weight: 600; fill: #f8fafc; }
+    .label-primary { font-size: 13px; font-weight: 500; fill: #e2e8f0; }
+    .label-tertiary { font-size: 11px; fill: #64748b; }
+  </style>
+
+  <!-- Background -->
+  <rect width="880" height="520" rx="12" fill="url(#bgGradPicker)" stroke="#1e293b" stroke-width="1" />
+
+  <!-- App Header Bar -->
+  <rect width="880" height="38" rx="12" fill="#0f172a" />
+  <circle cx="20" cy="19" r="6" fill="#ef4444" opacity="0.8" />
+  <circle cx="38" cy="19" r="6" fill="#f59e0b" opacity="0.8" />
+  <circle cx="56" cy="19" r="6" fill="#10b981" opacity="0.8" />
+  <text x="440" y="24" text-anchor="middle" class="font-base" font-size="12" fill="#64748b" font-weight="500">dsh-workspace-tree — 自研原生级「可视化目录选择器」演示</text>
+
+  <!-- Modal Center Card (Left Half 460px width) -->
+  <g transform="translate(30, 56)">
+    <rect width="440" height="436" rx="10" fill="url(#modalGrad)" stroke="#2563eb" stroke-width="1.2" filter="drop-shadow(0 20px 40px rgba(0,0,0,0.85))" />
+
+    <!-- 1. Modal Header -->
+    <g transform="translate(16, 14)">
+      <path d="M2 4.25C2 3.55 2.55 3 3.25 3H6.08C6.41 3 6.73 3.13 6.96 3.36L8.13 4.53C8.36 4.76 8.68 4.89 9.01 4.89H12.75C13.44 4.89 14 5.45 14 6.14V11.75C14 12.44 13.44 13 12.75 13H3.25C2.55 13 2 12.44 2 11.75V4.25Z" fill="#60a5fa" stroke="#60a5fa" stroke-width="0.5"/>
+      <text x="24" y="14" class="font-base title">选择工作区目录</text>
+      <!-- Close Icon -->
+      <g transform="translate(390, 0)">
+        <path d="M2 2 L10 10 M10 2 L2 10" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/>
+      </g>
+    </g>
+
+    <!-- 2. Breadcrumb Navigation Bar -->
+    <g transform="translate(12, 44)">
+      <rect width="416" height="30" rx="6" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      
+      <!-- Home Icon & Label -->
+      <g transform="translate(8, 8)">
+        <path d="M2 5 L6 1.5 L10 5 V10 H7 V7 H5 V10 H2 V5 Z" fill="none" stroke="#93c5fd" stroke-width="1.2"/>
+        <text x="14" y="10" class="font-base" font-size="11" font-weight="600" fill="#93c5fd">主目录</text>
+      </g>
+
+      <!-- Path Segments -->
+      <text x="68" y="19" class="font-base" font-size="11" fill="#64748b">/</text>
+      <text x="78" y="19" class="font-base" font-size="11" fill="#cbd5e1">workspace</text>
+      <text x="138" y="19" class="font-base" font-size="11" fill="#64748b">/</text>
+      <text x="148" y="19" class="font-base" font-size="11" font-weight="600" fill="#f8fafc">my-project</text>
+
+      <!-- Edit Icon -->
+      <g transform="translate(390, 7)">
+        <path d="M2 9 L9 2 L11 4 L4 11 L1 12 Z" fill="none" stroke="#64748b" stroke-width="1"/>
+      </g>
+    </g>
+
+    <!-- 3. Folder List Body -->
+    <g transform="translate(12, 82)">
+      <!-- Folder Item 1 -->
+      <g transform="translate(0, 0)">
+        <rect width="416" height="32" rx="6" fill="rgba(255,255,255,0.02)"/>
+        <path d="M12 9 L15 9 L17 11 L23 11 C24 11 24.5 11.5 24.5 12 L24.5 18 C24.5 18.5 24 19 23 19 L12 19 C11 19 10.5 18.5 10.5 18 L10.5 10 C10.5 9.5 11 9 12 9 Z" fill="#60a5fa" opacity="0.8"/>
+        <text x="34" y="20" class="font-base label-primary">apps</text>
+        <path d="M394 13 L398 16 L394 19" stroke="#64748b" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+      </g>
+
+      <!-- Folder Item 2 (Selected / Hovered) -->
+      <g transform="translate(0, 36)">
+        <rect width="416" height="32" rx="6" fill="rgba(96, 165, 250, 0.16)" stroke="rgba(96, 165, 250, 0.3)" stroke-width="1"/>
+        <path d="M12 9 L15 9 L17 11 L23 11 C24 11 24.5 11.5 24.5 12 L24.5 18 C24.5 18.5 24 19 23 19 L12 19 C11 19 10.5 18.5 10.5 18 L10.5 10 C10.5 9.5 11 9 12 9 Z" fill="#60a5fa"/>
+        <text x="34" y="20" class="font-base" font-size="13" font-weight="600" fill="#93c5fd">packages</text>
+        <path d="M394 13 L398 16 L394 19" stroke="#60a5fa" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+      </g>
+
+      <!-- Folder Item 3 -->
+      <g transform="translate(0, 72)">
+        <rect width="416" height="32" rx="6" fill="transparent"/>
+        <path d="M12 9 L15 9 L17 11 L23 11 C24 11 24.5 11.5 24.5 12 L24.5 18 C24.5 18.5 24 19 23 19 L12 19 C11 19 10.5 18.5 10.5 18 L10.5 10 C10.5 9.5 11 9 12 9 Z" fill="#60a5fa" opacity="0.8"/>
+        <text x="34" y="20" class="font-base label-primary">server</text>
+        <path d="M394 13 L398 16 L394 19" stroke="#64748b" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+      </g>
+
+      <!-- Folder Item 4 -->
+      <g transform="translate(0, 108)">
+        <rect width="416" height="32" rx="6" fill="transparent"/>
+        <path d="M12 9 L15 9 L17 11 L23 11 C24 11 24.5 11.5 24.5 12 L24.5 18 C24.5 18.5 24 19 23 19 L12 19 C11 19 10.5 18.5 10.5 18 L10.5 10 C10.5 9.5 11 9 12 9 Z" fill="#60a5fa" opacity="0.8"/>
+        <text x="34" y="20" class="font-base label-primary">docs</text>
+        <path d="M394 13 L398 16 L394 19" stroke="#64748b" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+      </g>
+
+      <!-- Folder Item 5 -->
+      <g transform="translate(0, 144)">
+        <rect width="416" height="32" rx="6" fill="transparent"/>
+        <path d="M12 9 L15 9 L17 11 L23 11 C24 11 24.5 11.5 24.5 12 L24.5 18 C24.5 18.5 24 19 23 19 L12 19 C11 19 10.5 18.5 10.5 18 L10.5 10 C10.5 9.5 11 9 12 9 Z" fill="#60a5fa" opacity="0.8"/>
+        <text x="34" y="20" class="font-base label-primary">scripts</text>
+        <path d="M394 13 L398 16 L394 19" stroke="#64748b" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+      </g>
+
+      <!-- Folder Item 6 -->
+      <g transform="translate(0, 180)">
+        <rect width="416" height="32" rx="6" fill="transparent"/>
+        <path d="M12 9 L15 9 L17 11 L23 11 C24 11 24.5 11.5 24.5 12 L24.5 18 C24.5 18.5 24 19 23 19 L12 19 C11 19 10.5 18.5 10.5 18 L10.5 10 C10.5 9.5 11 9 12 9 Z" fill="#60a5fa" opacity="0.8"/>
+        <text x="34" y="20" class="font-base label-primary">tests</text>
+        <path d="M394 13 L398 16 L394 19" stroke="#64748b" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+      </g>
+
+      <!-- Folder Item 7: Hidden folder preview -->
+      <g transform="translate(0, 216)">
+        <rect width="416" height="32" rx="6" fill="transparent"/>
+        <path d="M12 9 L15 9 L17 11 L23 11 C24 11 24.5 11.5 24.5 12 L24.5 18 C24.5 18.5 24 19 23 19 L12 19 C11 19 10.5 18.5 10.5 18 L10.5 10 C10.5 9.5 11 9 12 9 Z" fill="#94a3b8" opacity="0.5"/>
+        <text x="34" y="20" class="font-base" font-size="13" fill="#94a3b8">.config</text>
+        <path d="M394 13 L398 16 L394 19" stroke="#64748b" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+      </g>
+    </g>
+
+    <!-- 4. Bottom Toolbar Bar -->
+    <g transform="translate(14, 384)">
+      <line x1="-2" y1="0" x2="416" y2="0" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+
+      <!-- New Folder Button -->
+      <g transform="translate(0, 10)">
+        <rect width="90" height="26" rx="5" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+        <path d="M12 13 H20 M16 9 V17" stroke="#cbd5e1" stroke-width="1.2" stroke-linecap="round"/>
+        <text x="26" y="17" class="font-base" font-size="11" fill="#cbd5e1">新建文件夹</text>
+      </g>
+
+      <!-- Show Hidden Checkbox -->
+      <g transform="translate(104, 15)">
+        <rect width="14" height="14" rx="3" fill="#2563eb" stroke="#3b82f6" stroke-width="1"/>
+        <path d="M3 7 L6 10 L11 4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <text x="22" y="12" class="font-base" font-size="11" fill="#94a3b8">显示隐藏文件</text>
+      </g>
+
+      <!-- Right Buttons -->
+      <g transform="translate(290, 10)">
+        <!-- Cancel -->
+        <text x="24" y="17" text-anchor="middle" class="font-base" font-size="12" fill="#94a3b8">取消</text>
+        <!-- Open Button -->
+        <g transform="translate(56, 0)">
+          <rect width="66" height="26" rx="5" fill="#2563eb" filter="drop-shadow(0 2px 6px rgba(37,99,235,0.4))"/>
+          <text x="33" y="17" text-anchor="middle" class="font-base" font-size="12" font-weight="600" fill="#ffffff">打开</text>
+        </g>
+      </g>
+    </g>
+  </g>
+
+  <!-- Right Explanations (380px width) -->
+  <g transform="translate(496, 64)">
+    <!-- Point 1 -->
+    <g transform="translate(0, 0)">
+      <rect width="354" height="96" rx="8" fill="#161f30" stroke="#2563eb" stroke-width="1.2"/>
+      <text x="18" y="28" class="font-base" font-size="13" font-weight="600" fill="#93c5fd">1. 原生级可视化目录树浏览 (Directory Tree)</text>
+      <text x="18" y="52" class="font-base" font-size="12" fill="#cbd5e1">基于 Node.js 宿主 RPC 极速读取目录结构，</text>
+      <text x="18" y="74" class="font-base" font-size="12" fill="#94a3b8">单击高亮、双击下钻进入，体验与系统文件管理器一致。</text>
+    </g>
+
+    <!-- Point 2 -->
+    <g transform="translate(0, 114)">
+      <rect width="354" height="96" rx="8" fill="#12251e" stroke="#059669" stroke-width="1.2"/>
+      <text x="18" y="28" class="font-base" font-size="13" font-weight="600" fill="#86efac">2. 路径面包屑与精准直达 (Breadcrumb Nav)</text>
+      <text x="18" y="52" class="font-base" font-size="12" fill="#cbd5e1">支持点击「主目录」一键回顶、逐级面包屑回退，</text>
+      <text x="18" y="74" class="font-base" font-size="12" fill="#4ade80">亦可点击铅笔图标直接粘贴绝对路径快速定位。</text>
+    </g>
+
+    <!-- Point 3 -->
+    <g transform="translate(0, 228)">
+      <rect width="354" height="96" rx="8" fill="#251a30" stroke="#9333ea" stroke-width="1.2"/>
+      <text x="18" y="28" class="font-base" font-size="13" font-weight="600" fill="#d8b4fe">3. 新建文件夹与隐藏文件 (Folder Creator)</text>
+      <text x="18" y="52" class="font-base" font-size="12" fill="#cbd5e1">支持在当前目录下就地新建文件夹并实时刷新，</text>
+      <text x="18" y="74" class="font-base" font-size="12" fill="#c084fc">支持切换「显示隐藏文件」查看以点开头的配置目录。</text>
+    </g>
+
+    <!-- Point 4 -->
+    <g transform="translate(0, 342)">
+      <rect width="354" height="76" rx="8" fill="#1e2430" stroke="#475569" stroke-width="1.2"/>
+      <text x="18" y="26" class="font-base" font-size="13" font-weight="600" fill="#cbd5e1">4. 0 Slot 冲突与全平台兼容 (Zero Conflicts)</text>
+      <text x="18" y="50" class="font-base" font-size="12" fill="#94a3b8">彻底规避 DSH 插槽限制，Web 与桌面端 100% 稳定运行！</text>
+    </g>
+  </g>
+</svg>

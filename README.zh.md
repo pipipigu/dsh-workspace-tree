@@ -4,8 +4,8 @@
   <strong><a href="./README.md">English</a></strong> | <strong>简体中文</strong>
 </p>
 
-> **Virtual Session Folder Grouping, Move-to-Folder Menu, and Nested Workspace Subproject Manager for DeepSeek Harness (DSH).**  
-> 为 DeepSeek Harness 打造的原生融合式会话分类树、文件夹管理、点击式移动菜单与嵌套子项目管理器。
+> **Virtual Session Folder Grouping, Move-to-Folder Menu, and In-App Visual Directory Browser for DeepSeek Harness (DSH).**  
+> 为 DeepSeek Harness 打造的原生融合式会话分类树、文件夹管理、点击式移动菜单与可视化工作区目录选择器。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![DSH Plugin](https://img.shields.io/badge/DSH-Plugin-success.svg)](https://github.com/pipipigu/dsh-workspace-tree)
@@ -22,7 +22,13 @@
 
 ---
 
-### 2. 点击式精准移动与快捷归类演示 (Move-to-Folder Interaction)
+### 2. 原生级可视化「选择工作区目录」弹窗 (In-App Directory Browser)
+
+![dsh-workspace-tree 可视化目录选择器演示](docs/preview-directory-picker.svg)
+
+---
+
+### 3. 点击式精准移动与快捷归类演示 (Move-to-Folder Interaction)
 
 ![dsh-workspace-tree 点击式精准移动菜单演示](docs/preview-move-menu.svg)
 
@@ -48,9 +54,12 @@
   - **快速归类与新建**：悬停点击会话行上的「📁 移动」图标，即刻弹出目标文件夹面板，支持一键选择分类或就地新建文件夹并移入；
   - **一键快捷移出**：文件夹内会话提供专属「移出」图标，点击瞬时退回未分类。
 
-- **➕ 顶层工作区新建与添加 (Add Workspace & Directory Picker)**
-  - 侧边栏顶部提供 **`[+]` 添加工作区** 按钮；
-  - 智能双模支持：优先唤起 OS 系统级目录选择器（原生体验），同时支持就地输入/粘贴绝对路径快速创建工作区。
+- **🗂️ 原生级可视化工作区目录选择器 (In-App Visual Directory Browser)**
+  - **一键可视化添加**：侧边栏顶部提供 **`[+]` 添加工作区** 按钮，点击即刻呼出高质感「选择工作区目录」居中对话框；
+  - **完整导航与下钻**：支持主目录/面包屑导航、单击选中、双击下钻目录、上级快速返回；
+  - **就地新建与显示隐藏文件**：支持在当前目录下就地新建文件夹，支持勾选「显示隐藏文件」；
+  - **路径快速编辑**：点击铅笔图标可直接输入或粘贴绝对路径快速定位；
+  - **0 Slot 冲突**：采用自研宿主 RPC 直读，彻底避开 DSH 内部插槽单次声明限制，Web 浏览器与桌面端 100% 顺畅运行。
 
 - **📌 会话置顶、双击重命名与分页流 (Pinning, Inline Rename & Pagination)**
   - 支持会话置顶（置顶会话自动排在最前）；

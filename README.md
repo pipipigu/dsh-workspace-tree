@@ -4,7 +4,7 @@
   <strong>English</strong> | <strong><a href="./README.zh.md">简体中文</a></strong>
 </p>
 
-> **Virtual Session Folder Grouping, Move-to-Folder Menu, and Nested Workspace Subproject Manager for DeepSeek Harness (DSH).**
+> **Virtual Session Folder Grouping, Move-to-Folder Menu, and In-App Visual Directory Browser for DeepSeek Harness (DSH).**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![DSH Plugin](https://img.shields.io/badge/DSH-Plugin-success.svg)](https://github.com/pipipigu/dsh-workspace-tree)
@@ -21,7 +21,13 @@
 
 ---
 
-### 2. Precision Click-to-Move Folder Menu
+### 2. In-App Visual Directory Browser & Workspace Creator
+
+![dsh-workspace-tree Visual Directory Browser](docs/preview-directory-picker.svg)
+
+---
+
+### 3. Precision Click-to-Move Folder Menu
 
 ![dsh-workspace-tree Move-to-Folder Interaction](docs/preview-move-menu.svg)
 
@@ -46,9 +52,12 @@
   - **Zero Misclicks**: Replaced awkward sidebar drag-and-drop with a crisp, reliable click-to-move dropdown menu.
   - **Instant Categorization**: Quick folder selection or inline new folder creation; dedicated eject button inside folders to return sessions to uncategorized.
 
-- **➕ Add Workspace & Directory Picker Support**
-  - Dedicated **`[+]` Add Workspace** button in the sidebar header bar.
-  - Smart dual-mode support: automatically invokes native OS directory pickers when available, while offering an inline absolute-path input field fallback.
+- **🗂️ In-App Visual Directory Browser & Workspace Creator**
+  - **One-Click Visual Adoption**: Click **`[+]`** on the sidebar header to open a native-feeling "Select Workspace Directory" modal dialog.
+  - **Full Hierarchy Navigation**: Home directory jump, breadcrumb navigation, single-click selection, double-click/chevron drill-down, and up-level button.
+  - **Inline Folder Creation & Hidden Files**: Create new subdirectories directly in the dialog and toggle hidden files (`.config`, etc.).
+  - **Direct Path Editing**: Click the pen icon to switch to raw path typing/pasting.
+  - **Zero Slot Conflicts**: Self-contained host RPC and UI, completely bypassing DSH internal slot conflicts with 100% stability across Web and Desktop.
 
 - **📌 Session Pinning, Inline Rename & Pagination**
   - Pin important sessions to the top of the workspace.
